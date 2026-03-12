@@ -6,8 +6,8 @@ import Sidebar from "../components/Sidebar";
 const Dashboard = ({ user }) => {
   return (
     <div
-      className="d-flex"
-      style={{ minHeight: "100vh", backgroundColor: "#11111b" }}
+      className="d-flex w-100"
+      style={{ minHeight: "100vh", backgroundColor: "#11111b", width: "100vw" }}
     >
       <Sidebar />
 

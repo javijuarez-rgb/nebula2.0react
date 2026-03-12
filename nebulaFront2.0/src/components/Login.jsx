@@ -12,8 +12,8 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="login-container" style={{
-      backgroundColor: '#11111b', height: '100vh', display: 'flex', 
-      alignItems: 'center', justifyContent: 'center'
+      backgroundColor: '#11111b', minHeight: '100vh', width: '100vw', display: 'flex', 
+      alignItems: 'center', justifyContent: 'center', margin: 0, padding: 0
     }}>
       <div className="card p-4 shadow-lg" style={{ width: '320px', backgroundColor: '#1e1e2e', border: '1px solid #313244' }}>
         <h2 className="text-center mb-4" style={{ color: '#89b4fa' }}>NEBULA LOGIN</h2>
