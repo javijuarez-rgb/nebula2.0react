@@ -37,7 +37,6 @@ const EstrategiaView = () => {
           >
             <ArrowLeft size={16} />
           </button>
-          <h3 className="text-white fw-bold mb-0">Estrategia y Marca</h3>
         </div>
 
         <select

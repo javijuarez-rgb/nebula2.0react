@@ -57,12 +57,7 @@ const CalendarioView = () => {
   return (
     <div className="container-fluid animate__animated animate__fadeIn">
       <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <h3 className="text-white fw-bold mb-0 d-flex align-items-center gap-2">
-          <CalendarIcon size={24} className="text-primary" />
-          Calendario de Tareas
-        </h3>
-        
-        <div className="d-flex align-items-center gap-3">
+        <div className="d-flex align-items-center gap-3 ms-auto">
           <div className="d-flex align-items-center gap-2">
             <Filter size={18} className="text-muted" />
             <select 

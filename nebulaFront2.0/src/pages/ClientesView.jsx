@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_CLIENTES } from '../mocks/data';
-import { Search, UserPlus, Phone, MapPin, BadgeCheck, X, Save, DollarSign, Globe, Instagram, Facebook, Mail, Youtube, Chrome, Linkedin, Twitter, Coffee, Utensils, Info } from 'lucide-react';
+import { Search, UserPlus, Phone, MapPin, BadgeCheck, X, Save, DollarSign, Globe, Instagram, Facebook, Mail, Youtube, Chrome, Linkedin, Twitter, Coffee, Briefcase, Info } from 'lucide-react';
 import Modal from '../components/Modal';
+import Paginacion from '../components/Paginacion';
 
 const ClientesView = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const ClientesView = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [errors, setErrors] = useState({});
+  const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
   const initialClientState = {
     nombre: '',
     telefono: '',
@@ -46,6 +48,10 @@ const ClientesView = () => {
   const [newClient, setNewClient] = useState(initialClientState);
   const [editingClient, setEditingClient] = useState(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
   const validateTextNoNumbers = (text) => {
     // Letters, spaces, accents, NO numbers
     return /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(text);
@@ -76,6 +82,14 @@ const ClientesView = () => {
       if (name === 'es_activo' && val === true) updated.es_potencial = false;
       if (name === 'es_potencial' && val === true) updated.es_activo = false;
       setNewClient(updated);
+    }
+
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrs = { ...prev };
+        delete newErrs[name];
+        return newErrs;
+      });
     }
   };
 
@@ -132,13 +146,34 @@ const ClientesView = () => {
     setShowEditModal(true);
   };
 
+  const validateForm = (client) => {
+    const newErrs = {};
+    if (!client.nombre.trim()) newErrs.nombre = 'El nombre es obligatorio';
+    if (!client.telefono) newErrs.telefono = 'El teléfono es obligatorio';
+    else if (client.telefono.length < 9) newErrs.telefono = 'Debe tener 9 dígitos';
+    
+    setErrors(newErrs);
+    return Object.keys(newErrs).length === 0;
+  };
+
+  const handleCreateClient = (e) => {
+    e.preventDefault();
+    if (!validateForm(newClient)) return;
+
+    const id = clientes.length > 0 ? Math.max(...clientes.map(c => c.id)) + 1 : 1;
+    setClientes([{ ...newClient, id }, ...clientes]);
+    
+    // Show success notification
+    setNotification({ show: true, message: `Cliente "${newClient.nombre}" creado con éxito`, type: 'success' });
+    setTimeout(() => setNotification({ ...notification, show: false }), 3000);
+
+    closeModal();
+    setNewClient(initialClientState);
+  };
+
   const handleUpdateClient = (e) => {
     e.preventDefault();
-    // Validaciones básicas antes de guardar
-    if (!editingClient.nombre.trim()) {
-      alert("El nombre es obligatorio");
-      return;
-    }
+    if (!validateForm(editingClient)) return;
     
     // Simulamos guardado actualizando el estado local
     setClientes(clientes.map(c => c.id === editingClient.id ? editingClient : c));
@@ -149,35 +184,41 @@ const ClientesView = () => {
     setShowModal(false);
     setShowEditModal(false);
     setEditingClient(null);
+    setErrors({});
   };
 
   // Filtramos en tiempo real
-  const filteredClientes = clientes.filter(c => 
-    c.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  const filteredClientes = useMemo(() => {
+    // Reset to page 1 when search changes
+    setCurrentPage(1);
+    return clientes.filter(c => 
+      c.nombre.toLowerCase().includes(busqueda.toLowerCase())
+    );
+  }, [clientes, busqueda]);
+
+  // Paginated items
+  const paginatedClientes = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredClientes.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredClientes, currentPage]);
+
+  const totalPages = Math.ceil(filteredClientes.length / itemsPerPage);
 
   return (
     <div className="container-fluid animate__animated animate__fadeIn">
-      {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <div>
-          <h3 className="text-white fw-bold mb-0">Gestión de Clientes</h3>
-          <p className="text-white opacity-50 small mb-0">Visualiza y administra tu cartera de clientes</p>
-        </div>
-        <button 
-          className="btn btn-primary d-flex align-items-center gap-2 fw-bold px-4 py-2 shadow-sm transition-all"
-          onClick={() => setShowModal(true)}
-        >
-          <UserPlus size={20} /> Nuevo Cliente
-        </button>
-      </div>
+      <button 
+        className="btn btn-primary d-flex align-items-center gap-2 fw-bold px-4 py-2 shadow-sm transition-all ms-auto mb-4"
+        onClick={() => setShowModal(true)}
+      >
+        <UserPlus size={20} /> Nuevo Cliente
+      </button>
 
       {/* Buscador */}
       <div className="card border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '15px' }}>
-        <div className="card-body p-3">
-          <div className="input-group input-group-lg border-0">
-            <span className="input-group-text bg-transparent border-0 text-white opacity-50">
-              <Search size={22} />
+        <div className="card-body p-2">
+          <div className="input-group border-0">
+            <span className="input-group-text bg-transparent border-0 text-white opacity-50 pe-0">
+              <Search size={20} />
             </span>
             <input 
               type="text" 
@@ -191,16 +232,26 @@ const ClientesView = () => {
         </div>
       </div>
 
+      <style>{`
+        .client-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .client-card:hover { transform: translateY(-5px) scale(1.02); border: 1px solid var(--primary-color) !important; box-shadow: 0 10px 25px rgba(0,0,0,0.3) !important; }
+        .social-container::-webkit-scrollbar { width: 4px; }
+        .social-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+      `}</style>
+
       {/* Grid de Clientes */}
-      <div className="row g-4">
-        {filteredClientes.map((cliente) => (
+      <div 
+        key={currentPage}
+        className="row g-4 animate__animated animate__fadeIn"
+      >
+        {paginatedClientes.map((cliente) => (
           <div key={cliente.id} className="col-xl-4 col-md-6">
             <div className="card h-100 border-0 shadow-sm client-card transition-all" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '15px', overflow: 'hidden' }}>
               <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-start mb-3">
                   <div className="d-flex align-items-center gap-3">
                     <div className="p-3 rounded-3 bg-primary bg-opacity-10 text-primary">
-                      <Utensils size={24} />
+                      <Briefcase size={24} />
                     </div>
                     <div>
                       <h5 className="mb-0 fw-bold text-white">{cliente.nombre}</h5>
@@ -244,6 +295,12 @@ const ClientesView = () => {
         ))}
       </div>
 
+      <Paginacion 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+
       {/* Modal: Nuevo Cliente */}
       <Modal
         show={showModal}
@@ -254,7 +311,7 @@ const ClientesView = () => {
         footer={
           <>
             <button type="button" className="btn btn-secondary flex-grow-1 fw-bold py-3" onClick={closeModal}>Cancelar</button>
-            <button type="button" className="btn btn-primary flex-grow-1 fw-bold py-3">
+            <button type="button" className="btn btn-primary flex-grow-1 fw-bold py-3" onClick={handleCreateClient}>
               <Save size={20} className="me-2" /> Guardar Nuevo Cliente
             </button>
           </>
@@ -271,22 +328,24 @@ const ClientesView = () => {
               <input 
                 type="text" 
                 name="nombre"
-                className="form-control form-control-dark" 
+                className={`form-control form-control-dark ${errors.nombre ? 'is-invalid' : ''}`} 
                 placeholder="Nombre de la empresa"
                 value={newClient.nombre}
                 onChange={handleInputChange}
               />
+              {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label small fw-bold text-white">Teléfono de Contacto (9 dígitos)</label>
               <input 
                 type="text" 
                 name="telefono"
-                className="form-control form-control-dark" 
+                className={`form-control form-control-dark ${errors.telefono ? 'is-invalid' : ''}`} 
                 placeholder="600 000 000"
                 value={newClient.telefono}
                 onChange={handleInputChange}
               />
+              {errors.telefono && <div className="invalid-feedback">{errors.telefono}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label small fw-bold text-white">Ubicación / Dirección (Máx 100)</label>
@@ -489,20 +548,22 @@ const ClientesView = () => {
               <input 
                 type="text" 
                 name="nombre"
-                className="form-control form-control-dark" 
+                className={`form-control form-control-dark ${errors.nombre ? 'is-invalid' : ''}`} 
                 value={editingClient?.nombre}
                 onChange={(e) => handleInputChange(e, true)}
               />
+              {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label small fw-bold text-white">Teléfono de Contacto (9 dígitos)</label>
               <input 
                 type="text" 
                 name="telefono"
-                className="form-control form-control-dark" 
+                className={`form-control form-control-dark ${errors.telefono ? 'is-invalid' : ''}`} 
                 value={editingClient?.telefono}
                 onChange={(e) => handleInputChange(e, true)}
               />
+              {errors.telefono && <div className="invalid-feedback">{errors.telefono}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label small fw-bold text-white">Ubicación / Dirección (Máx 100)</label>
@@ -676,12 +737,18 @@ const ClientesView = () => {
         </form>
       </Modal>
 
-      <style>{`
-        .client-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .client-card:hover { transform: translateY(-5px) scale(1.02); border: 1px solid var(--primary-color) !important; box-shadow: 0 10px 25px rgba(0,0,0,0.3) !important; }
-        .social-container::-webkit-scrollbar { width: 4px; }
-        .social-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
-      `}</style>
+      {/* Notification Toast */}
+      {notification.show && (
+        <div className="position-fixed bottom-0 start-50 translate-middle-x mb-4 animate__animated animate__bounceInUp" style={{ zIndex: 1100 }}>
+          <div className={`card border-0 shadow-lg ${notification.type === 'success' ? 'bg-success' : 'bg-danger'} text-white`}>
+            <div className="card-body py-2 px-4 d-flex align-items-center gap-2">
+              <BadgeCheck size={20} />
+              <span className="fw-bold">{notification.message}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

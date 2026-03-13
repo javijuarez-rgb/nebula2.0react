@@ -5,9 +5,19 @@ import Modal from '../components/Modal';
 
 const EquipoView = () => {
   const [equipo, setEquipo] = useState(MOCK_EQUIPO);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const initialUserState = {
+    nombre: '',
+    usuario: '',
+    rol: 'Empleado',
+    pin_generado: ''
+  };
+  const [newUser, setNewUser] = useState(initialUserState);
 
   // Handlers for Modals
   const handleEdit = (user) => {
@@ -26,76 +36,79 @@ const EquipoView = () => {
   };
 
   const saveEdit = () => {
+    if (!validateForm(selectedUser)) return;
     setEquipo(equipo.map(u => u.id === selectedUser.id ? selectedUser : u));
     setShowEditModal(false);
   };
 
+  const validateForm = (user) => {
+    const newErrs = {};
+    if (!user.nombre || !user.nombre.trim()) newErrs.nombre = 'El nombre es obligatorio';
+    if (!user.usuario || !user.usuario.trim()) newErrs.usuario = 'El usuario es obligatorio';
+    else if (user.usuario.length < 3) newErrs.usuario = 'Mínimo 3 caracteres';
+    
+    setErrors(newErrs);
+    return Object.keys(newErrs).length === 0;
+  };
+
+  const handleCreateUser = () => {
+    if (!validateForm(newUser)) return;
+    const id = equipo.length > 0 ? Math.max(...equipo.map(u => u.id)) + 1 : 1;
+    const pin = newUser.pin_generado || Math.random().toString(36).substring(2, 8).toUpperCase();
+    
+    setEquipo([...equipo, { ...newUser, id, pin_generado: pin }]);
+    setShowCreateModal(false);
+    setNewUser(initialUserState);
+  };
+
   const closeModal = () => {
+    setShowCreateModal(false);
     setShowEditModal(false);
     setShowDeleteModal(false);
     setSelectedUser(null);
+    setErrors({});
   };
 
   const validateName = (text) => /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(text) && text.length <= 40;
-  const validateUser = (text) => text.length >= 3 && text.length <= 20;
   const validateAlphanumeric = (text) => /^[a-zA-Z0-9]*$/.test(text);
 
-  const handleNewUserChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (e, isEdit = false) => {
+    const { name, value, type, checked } = e.target;
+    
     if (name === 'nombre' && !validateName(value)) return;
     if (name === 'usuario' && value.length > 20) return;
+    if (name === 'pin_generado' && !validateAlphanumeric(value)) return;
+
+    if (isEdit) {
+      setSelectedUser({ ...selectedUser, [name]: value });
+    } else {
+      const val = type === 'checkbox' ? (checked ? 'Admin' : 'Empleado') : value;
+      setNewUser({ ...newUser, [name]: val });
+    }
+
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrs = { ...prev };
+        delete newErrs[name];
+        return newErrs;
+      });
+    }
   };
 
   return (
     <div className="container-fluid animate__animated animate__fadeIn">
+      <div className="d-flex justify-content-end mb-4">
+        <button 
+          className="btn btn-primary d-flex align-items-center gap-2 fw-bold px-4 py-2 shadow-sm"
+          onClick={() => setShowCreateModal(true)}
+        >
+          <UserPlus size={20} /> Nuevo Integrante
+        </button>
+      </div>
+
       <div className="row g-4">
-        {/* Sidebar: Nuevo Usuario */}
-        <div className="col-lg-3">
-          <div className="card h-100 shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '15px' }}>
-            <div className="card-body p-4">
-              <div className="d-flex align-items-center gap-2 mb-4">
-                <div className="p-2 rounded bg-primary-subtle text-primary">
-                  <UserPlus size={20} />
-                </div>
-                <h5 className="mb-0 fw-bold" style={{ color: 'var(--primary-color)' }}>Nuevo Usuario</h5>
-              </div>
-
-              <form>
-                <div className="mb-3">
-                  <label className="form-label small fw-bold text-white">Nombre Real</label>
-                  <input 
-                    type="text" 
-                    name="nombre"
-                    className="form-control-dark form-control" 
-                    placeholder="Nombre y Apellidos"
-                    onChange={handleNewUserChange}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="form-label small fw-bold text-white">Usuario Login</label>
-                  <input 
-                    type="text" 
-                    name="usuario"
-                    className="form-control-dark form-control" 
-                    placeholder="nombre.usuario"
-                  />
-                </div>
-
-                <div className="form-check p-3 rounded mb-4 d-flex align-items-center gap-2" style={{ backgroundColor: 'var(--bg-deep)', border: '1px solid var(--border-color)', minHeight: '45px' }}>
-                  <input className="form-check-input ms-0" type="checkbox" id="esAdminSwitch" style={{ marginTop: '0' }} />
-                  <label className="form-check-label small fw-bold text-white cursor-pointer" htmlFor="esAdminSwitch">¿Es Administrador?</label>
-                </div>
-
-                <button type="button" className="btn btn-primary w-100 fw-bold py-2 shadow-sm">
-                  Crear Usuario
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-
         {/* Main: Tabla de Equipo */}
-        <div className="col-lg-9">
+        <div className="col-12">
           <div className="card shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '15px' }}>
             <div className="card-body p-0">
               <div className="p-4 border-bottom border-secondary border-opacity-10 d-flex justify-content-between align-items-center">
@@ -172,6 +185,71 @@ const EquipoView = () => {
         </div>
       </div>
 
+      {/* Create Modal */}
+      <Modal
+        show={showCreateModal}
+        onClose={closeModal}
+        title="Crear Nuevo Integrante"
+        icon={<UserPlus size={24} />}
+        footer={
+          <>
+            <button className="btn btn-secondary flex-grow-1 fw-bold py-2" onClick={closeModal}>Cancelar</button>
+            <button className="btn btn-primary flex-grow-1 fw-bold py-2" onClick={handleCreateUser}>Crear Usuario</button>
+          </>
+        }
+      >
+        <div className="animate__animated animate__fadeIn">
+          <div className="mb-3">
+            <label className="form-label small fw-bold text-white">Nombre Real (Máx 40, sin números)</label>
+            <input 
+              type="text" 
+              name="nombre"
+              className={`form-control form-control-dark ${errors.nombre ? 'is-invalid' : ''}`} 
+              placeholder="Nombre y Apellidos"
+              value={newUser.nombre}
+              onChange={handleInputChange}
+            />
+            {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
+          </div>
+          <div className="mb-3">
+            <label className="form-label small fw-bold text-white">Usuario Login (3-20 caracteres)</label>
+            <input 
+              type="text" 
+              name="usuario"
+              className={`form-control form-control-dark ${errors.usuario ? 'is-invalid' : ''}`} 
+              placeholder="nombre.usuario"
+              value={newUser.usuario}
+              onChange={handleInputChange}
+            />
+            {errors.usuario && <div className="invalid-feedback">{errors.usuario}</div>}
+          </div>
+          <div className="mb-3">
+            <label className="form-label small fw-bold text-white">Rol de Usuario</label>
+            <select 
+              name="rol"
+              className="form-select form-control-dark" 
+              value={newUser.rol}
+              onChange={handleInputChange}
+            >
+              <option value="Empleado">Empleado</option>
+              <option value="Admin">Admin</option>
+              <option value="Superadmin">Superadmin</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="form-label small fw-bold text-white">Clave/PIN (Opcional)</label>
+            <input 
+              type="text" 
+              name="pin_generado"
+              className="form-control form-control-dark" 
+              placeholder="Auto-generado si se deja vacío"
+              value={newUser.pin_generado}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+      </Modal>
+
       {/* Edit Modal */}
       <Modal
         show={showEditModal && selectedUser}
@@ -191,30 +269,31 @@ const EquipoView = () => {
               <label className="form-label small fw-bold text-white">Nombre Real (Máx 40, sin números)</label>
               <input 
                 type="text" 
-                className="form-control form-control-dark" 
+                name="nombre"
+                className={`form-control form-control-dark ${errors.nombre ? 'is-invalid' : ''}`} 
                 value={selectedUser.nombre}
-                onChange={(e) => {
-                  if (validateName(e.target.value)) setSelectedUser({...selectedUser, nombre: e.target.value})
-                }}
+                onChange={(e) => handleInputChange(e, true)}
               />
+              {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label small fw-bold text-white">Usuario Login (3-20 caracteres)</label>
               <input 
                 type="text" 
-                className="form-control form-control-dark" 
+                name="usuario"
+                className={`form-control form-control-dark ${errors.usuario ? 'is-invalid' : ''}`} 
                 value={selectedUser.usuario}
-                onChange={(e) => {
-                  if (e.target.value.length <= 20) setSelectedUser({...selectedUser, usuario: e.target.value})
-                }}
+                onChange={(e) => handleInputChange(e, true)}
               />
+              {errors.usuario && <div className="invalid-feedback">{errors.usuario}</div>}
             </div>
             <div className="mb-3">
               <label className="form-label small fw-bold text-white">Rol de Usuario</label>
               <select 
+                name="rol"
                 className="form-select form-control-dark" 
                 value={selectedUser.rol}
-                onChange={(e) => setSelectedUser({...selectedUser, rol: e.target.value})}
+                onChange={(e) => handleInputChange(e, true)}
               >
                 <option value="Empleado">Empleado</option>
                 <option value="Admin">Admin</option>
@@ -225,12 +304,11 @@ const EquipoView = () => {
               <label className="form-label small fw-bold text-white">Clave/PIN</label>
               <input 
                 type="text" 
+                name="pin_generado"
                 className="form-control form-control-dark" 
                 placeholder="Letras y números"
                 value={selectedUser.pin_generado}
-                onChange={(e) => {
-                  if (validateAlphanumeric(e.target.value)) setSelectedUser({...selectedUser, pin_generado: e.target.value})
-                }}
+                onChange={(e) => handleInputChange(e, true)}
               />
             </div>
           </div>

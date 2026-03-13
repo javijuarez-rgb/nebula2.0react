@@ -15,26 +15,9 @@ import EstrategiaView from './pages/EstrategiaView';
 import CalendarioView from './pages/CalendarioView';
 import TareasView from './pages/TareasView';
 import PerfilView from './pages/PerfilView';
-import StatCard from './components/StatCard';
+import StatsView from './pages/StatsView';
 import { useTareas } from './hooks/useTareas';
 
-// Create a small wrapper for Stats
-function StatsView() {
-  const { tareas } = useTareas();
-  return (
-    <div className="row g-3">
-      <div className="col-md-4">
-        <StatCard
-          title="Total Tareas"
-          value={tareas.length}
-          color="#89b4fa"
-          icon="📁"
-        />
-      </div>
-      {/* Aquí irían las demás Stats del PHP */}
-    </div>
-  );
-}
 
 function App() {
   const { user, login, isAuthenticated } = useAuth();

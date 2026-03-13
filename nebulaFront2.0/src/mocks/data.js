@@ -1,75 +1,81 @@
 // src/mocks/data.js
 
 export const MOCK_CLIENTES = [
-  {
-    id: 1,
-    nombre: "Restaurante La Nebula",
-    logos: ["https://via.placeholder.com/150", "https://via.placeholder.com/50"],
-    colores: ["#89b4fa", "#f38ba8"],
-    tipografias: ["Montserrat", "Open Sans"],
-    estrategias: [
-      { id: 1, fecha: "2026-03-01", titulo: "Campaña Primavera", desc: "Promoción de terrazas" }
-    ],
-    es_activo: 1,
-    telefono: "600123456",
-    direccion: "Calle Falsa 123",
-    es_potencial: 0
-  },
-  {
-    id: 2,
-    nombre: "Gimnasio FitTech",
-    logos: [],
-    colores: [],
-    tipografias: [],
-    estrategias: [],
-    es_activo: 0,
-    telefono: "600654321",
-    direccion: "Av. Deportiva 45",
-    es_potencial: 1
-  }
+  { id: 1, nombre: "Restaurante La Nebula", es_activo: 1, es_potencial: 0, telefono: "600123456", direccion: "Calle Falsa 123", colores: ["#89b4fa", "#f38ba8"], tipografias: ["Montserrat"], estrategias: [] },
+  { id: 2, nombre: "Gimnasio FitTech", es_activo: 0, es_potencial: 1, telefono: "600654321", direccion: "Av. Deportiva 45", colores: [], tipografias: [], estrategias: [] },
+  { id: 3, nombre: "Inmobiliaria Luxe", es_activo: 1, es_potencial: 0, telefono: "611000111", direccion: "Plaza Mayor 1", colores: ["#fab387"], tipografias: ["Playfair Display"], estrategias: [] },
+  { id: 4, nombre: "Clínica Dental Sonrisas", es_activo: 1, es_potencial: 0, telefono: "622111222", direccion: "Av. Salud 12", colores: ["#94e2d5"], tipografias: ["Roboto"], estrategias: [] },
+  { id: 5, nombre: "Cafetería Aroma", es_activo: 0, es_potencial: 1, telefono: "633222333", direccion: "Calle Grano 5", colores: [], tipografias: [], estrategias: [] },
+  { id: 6, nombre: "Taller Mecánico Veloz", es_activo: 1, es_potencial: 0, telefono: "644333444", direccion: "Polígono Ind. 8", colores: ["#f38ba8"], tipografias: ["Oswald"], estrategias: [] },
+  { id: 7, nombre: "Tienda de Ropa Trendy", es_activo: 1, es_potencial: 0, telefono: "655444555", direccion: "Calle Moda 22", colores: ["#cba6f7"], tipografias: ["Lato"], estrategias: [] },
+  { id: 8, nombre: "Academia de Inglés Smart", es_activo: 0, es_potencial: 1, telefono: "666555666", direccion: "Calle Saber 3", colores: [], tipografias: [], estrategias: [] },
+  { id: 9, nombre: "Peluquería Estilo", es_activo: 1, es_potencial: 0, telefono: "677666777", direccion: "Av. Belleza 9", colores: ["#f5c2e7"], tipografias: ["Open Sans"], estrategias: [] },
+  { id: 10, nombre: "Consultoría Éxito", es_activo: 1, es_potencial: 0, telefono: "688777888", direccion: "Edificio Prime 402", colores: ["#89dceb"], tipografias: ["Inter"], estrategias: [] },
+  { id: 11, nombre: "Supermercado Local", es_activo: 1, es_potencial: 0, telefono: "699888999", direccion: "Calle Abasto 15", colores: ["#a6e3a1"], tipografias: ["Poppins"], estrategias: [] },
+  { id: 12, nombre: "Hotel Paraíso", es_activo: 0, es_potencial: 1, telefono: "611222333", direccion: "Costa Azul 100", colores: [], tipografias: [], estrategias: [] },
+  { id: 13, nombre: "Joyería Brillante", es_activo: 1, es_potencial: 0, telefono: "600000013", direccion: "Calle Oro 13", colores: ["#f9e2af"], tipografias: ["Cinzel"], estrategias: [] },
+  { id: 14, nombre: "Librería El Sabio", es_activo: 1, es_potencial: 0, telefono: "600000014", direccion: "Av. Letras 14", colores: ["#eba0ac"], tipografias: ["Merriweather"], estrategias: [] },
+  { id: 15, nombre: "Pet Shop Amigos", es_activo: 1, es_potencial: 0, telefono: "600000015", direccion: "Calle Huella 15", colores: ["#fab387"], tipografias: ["Varela Round"], estrategias: [] },
+  { id: 16, nombre: "Centro Estético Aura", es_activo: 1, es_potencial: 0, telefono: "600000016", direccion: "Av. Salud 16", colores: ["#cba6f7"], tipografias: ["Quicksand"], estrategias: [] },
+  { id: 17, nombre: "Agencia de Viajes Nómada", es_activo: 1, es_potencial: 0, telefono: "600000017", direccion: "Calle Mundo 17", colores: ["#94e2d5"], tipografias: ["Poppins"], estrategias: [] },
+  { id: 18, nombre: "Floristería Pétalos", es_activo: 1, es_potencial: 0, telefono: "600000018", direccion: "Av. Jardín 18", colores: ["#a6e3a1"], tipografias: ["Dancing Script"], estrategias: [] },
+  { id: 19, nombre: "Academia de Baile Ritmo", es_activo: 1, es_potencial: 0, telefono: "600000019", direccion: "Calle Paso 19", colores: ["#f38ba8"], tipografias: ["Oswald"], estrategias: [] },
+  { id: 20, nombre: "Óptica Visión Clara", es_activo: 1, es_potencial: 0, telefono: "600000020", direccion: "Av. Mirada 20", colores: ["#89b4fa"], tipografias: ["Inter"], estrategias: [] },
+  { id: 21, nombre: "Zapatería Calzado Real", es_activo: 1, es_potencial: 0, telefono: "600000021", direccion: "Calle Suela 21", colores: ["#f5c2e7"], tipografias: ["Arimo"], estrategias: [] },
+  { id: 22, nombre: "Restaurante Vegano Bio", es_activo: 1, es_potencial: 0, telefono: "600000022", direccion: "Av. Verde 22", colores: ["#94e2d5"], tipografias: ["Mukta"], estrategias: [] },
+  { id: 23, nombre: "Estudio de Yoga Om", es_activo: 1, es_potencial: 0, telefono: "600000023", direccion: "Calle Paz 23", colores: ["#89dceb"], tipografias: ["Nunito"], estrategias: [] },
+  { id: 24, nombre: "Coworking Innova", es_activo: 1, es_potencial: 0, telefono: "600000024", direccion: "Edificio Tech 24", colores: ["#cba6f7"], tipografias: ["Work Sans"], estrategias: [] }
 ];
 
 export const MOCK_TAREAS = [
-  {
-    id: 101,
-    cliente_id: 1,
-    cliente_nombre: "Restaurante La Nebula",
-    titulo: "Reel de cocina en vivo",
-    descripcion: "Grabar al chef preparando el plato estrella",
-    prioridad: "alta",
-    estado: "proceso",
-    fecha_limite: "2026-03-15 14:00:00",
-    empleados: "Juan Pérez, Admin",
-    mensaje_empleado: ""
-  },
-  {
-    id: 102,
-    cliente_id: 2,
-    cliente_nombre: "Gimnasio FitTech",
-    titulo: "Post de bienvenida",
-    descripcion: "Diseño para nuevos socios",
-    prioridad: "media",
-    estado: "pendiente",
-    fecha_limite: "2026-03-20 10:00:00",
-    empleados: "Admin",
-    mensaje_empleado: ""
-  },
-  {
-    id: 103,
-    cliente_id: 1,
-    cliente_nombre: "Restaurante La Nebula",
-    titulo: "Diseño de Menú QR",
-    descripcion: "Actualizar precios y subir a servidor",
-    prioridad: "media",
-    estado: "espera_aprobacion",
-    fecha_limite: "2026-03-10 10:00:00",
-    empleados: "Admin",
-    mensaje_empleado: "Revisad el PDF adjunto por favor. https://example.com/uploads/pruebas/menu_v2.pdf"
-  }
+  { id: 101, cliente_id: 1, cliente_nombre: "Restaurante La Nebula", titulo: "Reel de cocina en vivo", descripcion: "Grabar al chef preparando el plato estrella", prioridad: "alta", estado: "proceso", fecha_limite: "2026-03-15 14:00:00", empleados: "Juan Pérez" },
+  { id: 102, cliente_id: 2, cliente_nombre: "Gimnasio FitTech", titulo: "Post de bienvenida", descripcion: "Diseño para nuevos socios", prioridad: "media", estado: "pendiente", fecha_limite: "2026-03-20 10:00:00", empleados: "Admin" },
+  { id: 103, cliente_id: 1, cliente_nombre: "Restaurante La Nebula", titulo: "Diseño de Menú QR", descripcion: "Actualizar precios y subir a servidor", prioridad: "media", estado: "espera_aprobacion", fecha_limite: "2026-03-10 10:00:00", empleados: "Admin", mensaje_empleado: "Revisad el PDF." },
+  { id: 104, cliente_id: 3, cliente_nombre: "Inmobiliaria Luxe", titulo: "Catálogo de Propiedades", descripcion: "Maquetación del catálogo mensual", prioridad: "baja", estado: "proceso", fecha_limite: "2026-03-25 18:00:00", empleados: "María García" },
+  { id: 105, cliente_id: 4, cliente_nombre: "Clínica Dental Sonrisas", titulo: "Anuncio Facebook Ads", descripcion: "Campaña de blanqueamiento dental", prioridad: "alta", estado: "terminada", fecha_limite: "2026-03-05 12:00:00", empleados: "Carlos López" },
+  { id: 106, cliente_id: 6, cliente_nombre: "Taller Mecánico Veloz", titulo: "Newsletter Clientes", descripcion: "Envío de ofertas de cambio de aceite", prioridad: "media", estado: "pendiente", fecha_limite: "2026-03-22 09:00:00", empleados: "Ana Martínez" },
+  { id: 107, cliente_id: 7, cliente_nombre: "Tienda de Ropa Trendy", titulo: "Sesión Fotos Nueva Colección", descripcion: "Fotografía de productos Primavera", prioridad: "alta", estado: "proceso", fecha_limite: "2026-03-18 10:00:00", empleados: "Juan Pérez, Carlos López" },
+  { id: 108, cliente_id: 9, cliente_nombre: "Peluquería Estilo", titulo: "Story de Instagram", descripcion: "Promo corte de pelo martes", prioridad: "baja", estado: "terminada", fecha_limite: "2026-03-10 11:00:00", empleados: "Ana Martínez" },
+  { id: 109, cliente_id: 10, cliente_nombre: "Consultoría Éxito", titulo: "Informe Trimestral", descripcion: "Redacción de informe de resultados", prioridad: "media", estado: "espera_aprobacion", fecha_limite: "2026-03-12 17:00:00", empleados: "María García" },
+  { id: 110, cliente_id: 11, cliente_nombre: "Supermercado Local", titulo: "Cartelería Pasillos", descripcion: "Diseño de carteles de ofertas", prioridad: "baja", estado: "pendiente", fecha_limite: "2026-03-30 14:00:00", empleados: "Carlos López" },
+  { id: 111, cliente_id: 4, cliente_nombre: "Clínica Dental Sonrisas", titulo: "Post Higiene Bucal", descripcion: "Consejos diarios en LinkedIn", prioridad: "baja", estado: "proceso", fecha_limite: "2026-03-21 08:00:00", empleados: "María García" },
+  { id: 112, cliente_id: 1, cliente_nombre: "Restaurante La Nebula", titulo: "Actualización Web", descripcion: "Corregir erratas en la sección contacto", prioridad: "media", estado: "terminada", fecha_limite: "2026-03-08 16:00:00", empleados: "Admin" },
+  { id: 113, cliente_id: 6, cliente_nombre: "Taller Mecánico Veloz", titulo: "Video YouTube", descripcion: "Tutorial básico mantenimiento frenos", prioridad: "alta", estado: "proceso", fecha_limite: "2026-03-28 12:00:00", empleados: "Juan Pérez" },
+  { id: 114, cliente_id: 3, cliente_nombre: "Inmobiliaria Luxe", titulo: "Banner Web", descripcion: "Promoción nuevos chalets", prioridad: "media", estado: "pendiente", fecha_limite: "2026-03-17 10:00:00", empleados: "Ana Martínez" },
+  { id: 115, cliente_id: 7, cliente_nombre: "Tienda de Ropa Trendy", titulo: "TikTok Outfit Semanal", descripcion: "Video corto combinando prendas", prioridad: "baja", estado: "terminada", fecha_limite: "2026-03-11 15:00:00", empleados: "Carlos López" },
+  { id: 116, cliente_id: 11, cliente_nombre: "Supermercado Local", titulo: "Flyer Buczoneo", descripcion: "Diseño folleto semanal", prioridad: "alta", estado: "proceso", fecha_limite: "2026-03-24 13:00:00", empleados: "María García" },
+  { id: 117, cliente_id: 10, cliente_nombre: "Consultoría Éxito", titulo: "Logo Sub-marca", descripcion: "Creación variante de logo para evento", prioridad: "media", estado: "espera_aprobacion", fecha_limite: "2026-03-14 11:00:00", empleados: "Admin" },
+  { id: 118, cliente_id: 9, cliente_nombre: "Peluquería Estilo", titulo: "SEO Local GMB", descripcion: "Optimizar ficha de Google Maps", prioridad: "baja", estado: "proceso", fecha_limite: "2026-03-26 12:00:00", empleados: "Ana Martínez" },
+  { id: 119, cliente_id: 4, cliente_nombre: "Clínica Dental Sonrisas", titulo: "Campaña Emailing", descripcion: "Recordatorio citas revisión anual", prioridad: "media", estado: "pendiente", fecha_limite: "2026-03-23 09:30:00", empleados: "Juan Pérez" },
+  { id: 120, cliente_id: 2, cliente_nombre: "Gimnasio FitTech", titulo: "Landing Page Yoga", descripcion: "Diseño página captación clases Yoga", prioridad: "alta", estado: "proceso", fecha_limite: "2026-04-01 10:00:00", empleados: "María García" },
+  { id: 121, cliente_id: 1, cliente_nombre: "Restaurante La Nebula", titulo: "Foto Plato del Mes", descripcion: "Sesión rápida plato de temporada", prioridad: "media", estado: "espera_aprobacion", fecha_limite: "2026-03-13 14:00:00", empleados: "Carlos López" },
+  { id: 122, cliente_id: 13, cliente_nombre: "Joyería Brillante", titulo: "Catálogo Anillos", descripcion: "Diseño de folleto para nueva colección", prioridad: "alta", estado: "proceso", fecha_limite: "2026-03-25 10:00:00", empleados: "María García" },
+  { id: 123, cliente_id: 14, cliente_nombre: "Librería El Sabio", titulo: "Post Club Lectura", descripcion: "Anuncio evento firma de libros", prioridad: "baja", estado: "pendiente", fecha_limite: "2026-03-20 18:00:00", empleados: "Ana Martínez" },
+  { id: 124, cliente_id: 15, cliente_nombre: "Pet Shop Amigos", titulo: "Ads Comida Perros", descripcion: "Campaña de retargeting", prioridad: "media", estado: "terminada", fecha_limite: "2026-03-10 09:00:00", empleados: "Carlos López" },
+  { id: 125, cliente_id: 16, cliente_nombre: "Centro Estético Aura", titulo: "Video Limpieza Facial", descripcion: "Editado para TikTok/Reels", prioridad: "alta", estado: "proceso", fecha_limite: "2026-03-22 11:00:00", empleados: "Juan Pérez" },
+  { id: 126, cliente_id: 17, cliente_nombre: "Agencia de Viajes Nómada", titulo: "Landing Safari", descripcion: "Página de venta para viaje Kenia", prioridad: "media", estado: "espera_aprobacion", fecha_limite: "2026-03-18 15:00:00", empleados: "Admin" },
+  { id: 127, cliente_id: 18, cliente_nombre: "Floristería Pétalos", titulo: "Mantenimiento Web", descripcion: "Actualizar stock de flores", prioridad: "baja", estado: "pendiente", fecha_limite: "2026-03-30 20:00:00", empleados: "María García" },
+  { id: 128, cliente_id: 19, cliente_nombre: "Academia de Baile Ritmo", titulo: "Cartel Festival", descripcion: "Gráfica para evento fin de curso", prioridad: "alta", estado: "proceso", fecha_limite: "2026-04-05 12:00:00", empleados: "Carlos López" },
+  { id: 129, cliente_id: 20, cliente_nombre: "Óptica Visión Clara", titulo: "SEO On-page", descripcion: "Optimizar keywords de cristales graduados", prioridad: "media", estado: "terminada", fecha_limite: "2026-03-05 17:00:00", empleados: "Ana Martínez" },
+  { id: 130, cliente_id: 21, cliente_nombre: "Zapatería Calzado Real", titulo: "Semanas Descuento", descripcion: "Banners para web", prioridad: "media", estado: "pendiente", fecha_limite: "2026-03-27 10:30:00", empleados: "Juan Pérez" },
+  { id: 131, cliente_id: 22, cliente_nombre: "Restaurante Vegano Bio", titulo: "Gestión RRSS", descripcion: "Planificación mensual contenido", prioridad: "alta", estado: "proceso", fecha_limite: "2026-03-21 14:00:00", empleados: "María García" },
+  { id: 132, cliente_id: 23, cliente_nombre: "Estudio de Yoga Om", titulo: "Newsletter Saludable", descripcion: "Envío consejos semanales", prioridad: "baja", estado: "espera_aprobacion", fecha_limite: "2026-03-15 08:30:00", empleados: "Admin" },
+  { id: 133, cliente_id: 24, cliente_nombre: "Coworking Innova", titulo: "Fotos Instalaciones", descripcion: "Sesión fotográfica nuevos despachos", prioridad: "media", estado: "pendiente", fecha_limite: "2026-04-10 11:00:00", empleados: "Juan Pérez" }
 ];
+
 export const MOCK_EQUIPO = [
   { id: 1, nombre: "Juan Pérez", usuario: "juan.p", rol: "Superadmin", pin_generado: "1234" },
   { id: 2, nombre: "María García", usuario: "maria.g", rol: "Admin", pin_generado: "5678" },
   { id: 3, nombre: "Carlos López", usuario: "carlos.l", rol: "Empleado", pin_generado: "9012" },
-  { id: 4, nombre: "Ana Martínez", usuario: "ana.m", rol: "Empleado", pin_generado: "3456" }
+  { id: 4, nombre: "Ana Martínez", usuario: "ana.m", rol: "Empleado", pin_generado: "3456" },
+  { id: 5, nombre: "David Ruiz", usuario: "david.r", rol: "Empleado", pin_generado: "7890" },
+  { id: 6, nombre: "Elena Sanz", usuario: "elena.s", rol: "Admin", pin_generado: "1122" },
+  { id: 7, nombre: "Sergio León", usuario: "sergio.l", rol: "Empleado", pin_generado: "3344" },
+  { id: 8, nombre: "Laura G. ", usuario: "laura.g", rol: "Empleado", pin_generado: "5566" },
+  { id: 9, nombre: "Pablo Mochila", usuario: "pablo.m", rol: "Empleado", pin_generado: "7788" },
+  { id: 10, nombre: "Sofía Torres", usuario: "sofia.t", rol: "Admin", pin_generado: "9900" },
+  { id: 11, nombre: "Ignacio Gil", usuario: "ignacio.g", rol: "Empleado", pin_generado: "2233" },
+  { id: 12, nombre: "Carmen Ruiz", usuario: "carmen.r", rol: "Empleado", pin_generado: "4455" },
+  { id: 13, nombre: "Marcos Polo", usuario: "marcos.p", rol: "Empleado", pin_generado: "6677" },
+  { id: 14, nombre: "Sandra Bullock", usuario: "sandra.b", rol: "Empleado", pin_generado: "8899" }
 ];

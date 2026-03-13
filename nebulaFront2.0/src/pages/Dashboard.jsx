@@ -26,6 +26,23 @@ const Dashboard = ({ user }) => {
     }
   };
 
+  const getPageSubtitle = () => {
+    const path = location.pathname.split("/")[1];
+    switch (path) {
+      case "stats": return "Visualiza el rendimiento y métricas clave de la plataforma.";
+      case "tareas": return "Organiza, filtra y gestiona el flujo de trabajo diario.";
+      case "calendario": return "Planificación temporal y eventos programados.";
+      case "chat": return "Comunicación directa con el equipo y clientes.";
+      case "clientes": return "Directorio completo y gestión de relaciones comerciales.";
+      case "aprobaciones": return "Revisión y validación de tareas pendientes de confirmar.";
+      case "finanzas": return "Seguimiento de presupuestos, gastos e ingresos.";
+      case "estrategia": return "Definición de objetivos y plan de marca.";
+      case "equipo": return "Gestión de miembros, roles y accesos.";
+      case "perfil": return "Configuración de tu cuenta y preferencias personales.";
+      default: return "Panel central de administración.";
+    }
+  };
+
   return (
     <div
       className="d-flex w-100"
@@ -35,9 +52,9 @@ const Dashboard = ({ user }) => {
 
       <div className="flex-grow-1 p-4 d-flex flex-column" style={{ minWidth: 0, height: "100vh", overflowY: "auto" }}>
         <header className="mb-4 d-flex justify-content-between align-items-center">
-          <div>
+          <div key={location.pathname} className="animate__animated animate__fadeIn">
             <h2 className="text-white fw-bold mb-0">{getPageTitle()}</h2>
-            <p className="text-white opacity-50 small mb-0">Bienvenido de nuevo, {user.name}</p>
+            <p className="text-white opacity-50 small mb-0">{getPageSubtitle()}</p>
           </div>
           
           <div className="position-relative">
@@ -103,8 +120,13 @@ const Dashboard = ({ user }) => {
           </div>
         </header>
         
-        <div className="flex-grow-1">
-          <Outlet />
+        <div className="flex-grow-1 position-relative">
+          <div 
+            key={location.pathname}
+            className="animate__animated animate__fadeIn h-100"
+          >
+            <Outlet />
+          </div>
         </div>
         
         <Footer />

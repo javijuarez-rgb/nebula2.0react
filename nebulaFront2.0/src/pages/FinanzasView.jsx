@@ -37,7 +37,6 @@ const FinanzasView = () => {
   return (
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3 className="text-white">Gestión Financiera</h3>
         <div className="btn-group">
           <button 
             className={`btn ${activeTab === 'budget' ? 'btn-primary' : 'btn-outline-primary'}`}

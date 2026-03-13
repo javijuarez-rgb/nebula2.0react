@@ -22,6 +22,12 @@
   --border-color: #313244;
   --border-hover: #45475a;
 
+  /* Status Colors (Brighter for dark bg) */
+  --success-color: #a6e3a1;
+  --warning-color: #f9e2af;
+  --info-color: #89dceb;
+  --danger-color: #f38ba8;
+
   color: var(--text-main);
   background-color: var(--bg-deep);
 
@@ -79,6 +85,24 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+/* Dark mode fixes for date/month inputs */
+.custom-month-input, 
+input[type="date"], 
+input[type="month"] {
+    color-scheme: dark !important;
+}
+
+::-webkit-calendar-picker-indicator {
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>') no-repeat center !important;
+    cursor: pointer;
+    opacity: 1 !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="month"]::-webkit-calendar-picker-indicator:hover {
+    transform: scale(1.1);
 }
 
 a {

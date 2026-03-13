@@ -3,6 +3,7 @@ import { Search, Plus, Filter, LayoutGrid, List, Save, User, Calendar, AlertCirc
 import { MOCK_TAREAS, MOCK_CLIENTES, MOCK_EQUIPO } from '../mocks/data';
 import TablaTareas from '../components/TablaTareas';
 import Modal from '../components/Modal';
+import Paginacion from '../components/Paginacion';
 
 const TareasView = ({ user }) => {
   const [tareas, setTareas] = useState(MOCK_TAREAS);
@@ -13,6 +14,10 @@ const TareasView = ({ user }) => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   
   // State for new task
   const initialTaskState = {
@@ -28,6 +33,9 @@ const TareasView = ({ user }) => {
 
   // Filtering logic
   const filteredTareas = useMemo(() => {
+    // Reset to page 1 when filters change
+    setCurrentPage(1);
+    
     return tareas.filter(t => {
       const matchBusqueda = t.titulo.toLowerCase().includes(busqueda.toLowerCase()) || 
                            t.cliente_nombre.toLowerCase().includes(busqueda.toLowerCase());
@@ -38,6 +46,14 @@ const TareasView = ({ user }) => {
       return matchBusqueda && matchEstado && matchCliente && matchTrabajador;
     });
   }, [tareas, busqueda, filtroEstado, filtroCliente, filtroTrabajador]);
+
+  // Paginated items
+  const paginatedTareas = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredTareas.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredTareas, currentPage]);
+
+  const totalPages = Math.ceil(filteredTareas.length / itemsPerPage);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -120,19 +136,12 @@ const TareasView = ({ user }) => {
 
   return (
     <div className="container-fluid animate__animated animate__fadeIn">
-      {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <div>
-          <h3 className="text-white fw-bold mb-0">Gestión de Tareas</h3>
-          <p className="text-white opacity-75 small mb-0">Organiza y supervisa el flujo de trabajo</p>
-        </div>
-        <button 
-          className="btn btn-primary d-flex align-items-center gap-2 fw-bold px-4 py-2 shadow-sm animate-pulse-light"
-          onClick={() => setShowModal(true)}
-        >
-          <Plus size={20} /> Nueva Tarea
-        </button>
-      </div>
+      <button 
+        className="btn btn-primary d-flex align-items-center gap-2 fw-bold px-4 py-2 shadow-sm animate-pulse-light ms-auto mb-4"
+        onClick={() => setShowModal(true)}
+      >
+        <Plus size={20} /> Nueva Tarea
+      </button>
 
       {/* Filters & Search Row */}
       <div className="row g-3 mb-4">
@@ -212,13 +221,23 @@ const TareasView = ({ user }) => {
         </div>
       </div>
 
-      <div className="card border-0 shadow-sm" style={{ backgroundColor: 'transparent' }}>
+      <div 
+        key={currentPage}
+        className="card border-0 shadow-sm animate__animated animate__fadeIn" 
+        style={{ backgroundColor: 'transparent' }}
+      >
         <TablaTareas 
-          tareas={filteredTareas} 
+          tareas={paginatedTareas} 
           user={user} 
           onEditTask={handleEditClick}
         />
       </div>
+
+      <Paginacion 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {/* New Task Modal */}
       <Modal
