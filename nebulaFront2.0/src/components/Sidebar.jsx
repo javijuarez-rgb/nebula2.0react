@@ -9,13 +9,15 @@ import {
   ShieldCheck,
   LogOut,
   LineChart,
-  Palette
+  Target,
+  Calendar
 } from "lucide-react";
 
 const Sidebar = () => {
   const menuItems = [
     { id: "stats", label: "Stats", icon: <LayoutDashboard size={20} /> },
     { id: "tareas", label: "Tareas", icon: <CheckSquare size={20} /> },
+    { id: "calendario", label: "Calendario", icon: <Calendar size={20} /> },
     { id: "chat", label: "Chat", icon: <MessageSquare size={20} /> },
     { id: "clientes", label: "Clientes", icon: <Briefcase size={20} /> },
     {
@@ -24,7 +26,7 @@ const Sidebar = () => {
       icon: <ShieldCheck size={20} />,
     },
     { id: "finanzas", label: "Finanzas", icon: <LineChart size={20} /> },
-    { id: "marca", label: "Marca", icon: <Palette size={20} /> },
+    { id: "estrategia", label: "Estrategia", icon: <Target size={20} /> },
     { id: "equipo", label: "Equipo", icon: <Users size={20} /> },
   ];
 

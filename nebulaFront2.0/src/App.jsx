@@ -10,8 +10,9 @@ import ChatView from './pages/ChatView';
 import ClientesView from './pages/ClientesView';
 import AprobacionesView from './pages/AprobacionesView';
 import FinanzasView from './pages/FinanzasView';
-import MarcaView from './pages/MarcaView';
 import EquipoView from './pages/EquipoView';
+import EstrategiaView from './pages/EstrategiaView';
+import CalendarioView from './pages/CalendarioView';
 import StatCard from './components/StatCard';
 import TablaTareas from './components/TablaTareas';
 import { useTareas } from './hooks/useTareas';
@@ -59,11 +60,13 @@ function App() {
         <Route index element={<Navigate to="/stats" replace />} />
         <Route path="stats" element={<StatsView />} />
         <Route path="tareas" element={<TareasView />} />
+        <Route path="calendario" element={<CalendarioView />} />
         <Route path="chat" element={<ChatView user={user} />} />
         <Route path="clientes" element={<ClientesView />} />
+        <Route path="estrategia" element={<EstrategiaView />} />
+        <Route path="estrategia/:clientId" element={<EstrategiaView />} />
         <Route path="aprobaciones" element={<AprobacionesView />} />
         <Route path="finanzas" element={<FinanzasView />} />
-        <Route path="marca" element={<MarcaView />} />
         <Route path="equipo" element={<EquipoView />} />
         <Route path="*" element={<Navigate to="/stats" replace />} />
       </Route>

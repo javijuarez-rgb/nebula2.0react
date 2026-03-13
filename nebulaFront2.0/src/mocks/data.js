@@ -22,7 +22,7 @@ export const MOCK_CLIENTES = [
     colores: [],
     tipografias: [],
     estrategias: [],
-    es_activo: 1,
+    es_activo: 0,
     telefono: "600654321",
     direccion: "Av. Deportiva 45",
     es_potencial: 1
