@@ -4,11 +4,14 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { MOCK_TAREAS, MOCK_CLIENTES } from '../mocks/data';
-import { Calendar as CalendarIcon, Filter, Plus } from 'lucide-react';
+import { Calendar as CalendarIcon, Filter, Plus, Info, Clock, Calendar, CheckCircle } from 'lucide-react';
+import Modal from '../components/Modal';
 
 const CalendarioView = () => {
   const [events, setEvents] = useState([]);
   const [filtroCliente, setFiltroCliente] = useState('all');
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const PRIORITY_COLORS = {
     urgente: '#f38ba8',
@@ -27,6 +30,8 @@ const CalendarioView = () => {
       textColor: '#11111b',
       extendedProps: {
         cliente_id: tarea.cliente_id,
+        cliente_nombre: tarea.cliente_nombre,
+        titulo_corto: tarea.titulo,
         descripcion: tarea.descripcion,
         prioridad: tarea.prioridad,
         estado: tarea.estado
@@ -39,6 +44,15 @@ const CalendarioView = () => {
       setEvents(mappedEvents.filter(ev => ev.extendedProps.cliente_id === parseInt(filtroCliente)));
     }
   }, [filtroCliente]);
+
+  const handleEventClick = (info) => {
+    setSelectedEvent({
+      title: info.event.title,
+      start: info.event.start,
+      ...info.event.extendedProps
+    });
+    setShowModal(true);
+  };
 
   return (
     <div className="container-fluid animate__animated animate__fadeIn">
@@ -96,12 +110,85 @@ const CalendarioView = () => {
               hour12: false
             }}
             dayMaxEvents={true}
-            eventClick={(info) => {
-              alert(`Tarea: ${info.event.title}\nPrioridad: ${info.event.extendedProps.prioridad.toUpperCase()}\nEstado: ${info.event.extendedProps.estado.toUpperCase()}\n\nDescripción: ${info.event.extendedProps.descripcion}`);
-            }}
+            eventClick={handleEventClick}
           />
         </div>
       </div>
+
+      {/* Modal de Detalles de Tarea */}
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        title="Detalles de la Tarea"
+        icon={<Info size={24} />}
+        footer={
+          <button 
+            className="btn btn-primary w-100 fw-bold py-2" 
+            onClick={() => setShowModal(false)}
+          >
+            Entendido
+          </button>
+        }
+      >
+        {selectedEvent && (
+          <div className="animate__animated animate__fadeIn">
+            <div className="mb-4">
+              <label className="small text-secondary fw-bold text-uppercase mb-1 d-block">Cliente</label>
+              <h5 className="text-primary fw-bold mb-0">{selectedEvent.cliente_nombre}</h5>
+            </div>
+
+            <div className="mb-4">
+              <label className="small text-secondary fw-bold text-uppercase mb-1 d-block">Tarea</label>
+              <h6 className="text-white fw-medium mb-0">{selectedEvent.titulo_corto}</h6>
+            </div>
+
+            <div className="row g-3 mb-4">
+              <div className="col-6">
+                <div className="p-3 rounded-3 border border-secondary border-opacity-10 bg-dark bg-opacity-25">
+                  <div className="d-flex align-items-center gap-2 text-primary mb-1">
+                    <Calendar size={16} />
+                    <span className="small fw-bold">Fecha</span>
+                  </div>
+                  <div className="text-white fw-medium">
+                    {selectedEvent.start.toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}
+                  </div>
+                </div>
+              </div>
+              <div className="col-6">
+                <div className="p-3 rounded-3 border border-secondary border-opacity-10 bg-dark bg-opacity-25">
+                  <div className="d-flex align-items-center gap-2 text-info mb-1">
+                    <Clock size={16} />
+                    <span className="small fw-bold">Hora</span>
+                  </div>
+                  <div className="text-white fw-medium">
+                    {selectedEvent.start.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <div 
+                  className="rounded-circle" 
+                  style={{ width: '12px', height: '12px', backgroundColor: PRIORITY_COLORS[selectedEvent.prioridad] }}
+                ></div>
+                <span className="small text-secondary fw-bold text-uppercase">Prioridad {selectedEvent.prioridad}</span>
+                <span className="mx-2 text-secondary">|</span>
+                <CheckCircle size={14} className="text-success" />
+                <span className="small text-secondary fw-bold text-uppercase">Estado {selectedEvent.estado}</span>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-3 border border-secondary border-opacity-10 bg-dark bg-opacity-10">
+              <label className="small text-secondary fw-bold text-uppercase mb-2 d-block">Descripción</label>
+              <p className="text-white opacity-75 small mb-0 lh-lg italic">
+                {selectedEvent.descripcion || "Sin descripción proporcionada."}
+              </p>
+            </div>
+          </div>
+        )}
+      </Modal>
 
       <style>{`
         .fc {
