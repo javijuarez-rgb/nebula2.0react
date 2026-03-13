@@ -34,12 +34,12 @@ const Modal = ({ show, onClose, title, icon, children, footer, maxWidth = '500px
       onClick={onClose}
     >
       <div 
-        className="nebula-modal-container card border-0 shadow-lg animate__animated animate__zoomIn animate__faster"
-        style={{ width: '100%', maxWidth: maxWidth, backgroundColor: 'var(--bg-card)', borderRadius: '20px' }}
+        className="nebula-modal-container card border-0 shadow-lg animate__animated animate__zoomIn animate__faster d-flex flex-column"
+        style={{ width: '100%', maxWidth: maxWidth, maxHeight: '90vh', backgroundColor: 'var(--bg-card)', borderRadius: '20px' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="card-header border-bottom border-secondary border-opacity-10 d-flex justify-content-between align-items-center p-4">
+        <div className="card-header border-bottom border-secondary border-opacity-10 d-flex justify-content-between align-items-center p-4 flex-shrink-0">
           <div className="d-flex align-items-center gap-3">
             {icon && (
               <div className="p-2 rounded bg-primary bg-opacity-10 text-primary d-flex">
@@ -57,13 +57,13 @@ const Modal = ({ show, onClose, title, icon, children, footer, maxWidth = '500px
         </div>
 
         {/* Body */}
-        <div className="card-body p-4 text-white">
+        <div className="card-body p-4 text-white overflow-auto nebula-scrollbar">
           {children}
         </div>
 
         {/* Footer */}
         {footer && (
-          <div className="card-footer border-top border-secondary border-opacity-10 p-4 d-flex gap-2">
+          <div className="card-footer border-top border-secondary border-opacity-10 p-4 d-flex gap-2 flex-shrink-0">
             {footer}
           </div>
         )}

@@ -265,10 +265,33 @@ const CalendarioView = () => {
           white-space: normal !important;
           height: auto !important;
         }
+        /* Efecto Zoom en Vista SEMANA (TimeGrid) */
+        .fc-timegrid-event:hover {
+          z-index: 100 !important;
+          transform: scale(1.5);
+          box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+          transition: transform 0.2s ease, z-index 0.2s;
+          border: 1px solid rgba(255,255,255,0.2) !important;
+          height: auto !important;
+          min-height: 150px !important;
+        }
+        .fc-timegrid-event:hover .fc-event-main {
+          white-space: normal !important;
+          overflow: visible !important;
+          padding: 10px !important;
+          height: auto !important;
+        }
+        .fc-timegrid-event:hover .fc-event-title {
+          font-size: 1rem !important;
+          margin-bottom: 5px;
+        }
         .fc-list-event {
           background-color: transparent !important;
         }
         .fc-list-day-cushion {
+          background-color: rgba(255, 255, 255, 0.03) !important;
+        }
+        .fc-list-event:hover td {
           background-color: rgba(255, 255, 255, 0.03) !important;
         }
         .fc-list-event-title b {

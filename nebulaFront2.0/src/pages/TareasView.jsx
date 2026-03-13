@@ -274,7 +274,7 @@ const TareasView = ({ user }) => {
               onChange={handleInputChange}
             ></textarea>
             <div className="text-end mt-1">
-              <small className={`extreme-small ${newTask.descripcion.length >= 180 ? 'text-warning' : 'text-muted'}`}>
+              <small className={`extreme-small ${newTask.descripcion.length >= 180 ? 'text-warning' : 'text-white opacity-25'}`}>
                 {newTask.descripcion.length}/200
               </small>
             </div>
@@ -310,7 +310,7 @@ const TareasView = ({ user }) => {
           <div className="col-md-12">
             <label className="form-label small fw-bold text-white">Asignar a (Separado por comas)</label>
             <div className="input-group">
-              <span className="input-group-text bg-deep border-secondary border-opacity-10 text-muted">
+              <span className="input-group-text bg-deep border-secondary border-opacity-10 text-white opacity-50">
                 <User size={16} />
               </span>
               <input 
@@ -382,7 +382,7 @@ const TareasView = ({ user }) => {
                 onChange={handleInputChange}
               ></textarea>
               <div className="text-end mt-1">
-                <small className={`extreme-small ${editingTask.descripcion.length >= 180 ? 'text-warning' : 'text-muted'}`}>
+                <small className={`extreme-small ${editingTask.descripcion.length >= 180 ? 'text-warning' : 'text-white opacity-25'}`}>
                   {editingTask.descripcion.length}/200
                 </small>
               </div>
@@ -433,7 +433,7 @@ const TareasView = ({ user }) => {
             <div className="col-md-6">
               <label className="form-label small fw-bold text-white">Asignados</label>
               <div className="input-group">
-                <span className="input-group-text bg-deep border-secondary border-opacity-10 text-muted">
+                <span className="input-group-text bg-deep border-secondary border-opacity-10 text-white opacity-50">
                   <User size={16} />
                 </span>
                 <input 

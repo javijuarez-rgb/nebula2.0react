@@ -162,7 +162,7 @@ const ClientesView = () => {
       <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
           <h3 className="text-white fw-bold mb-0">Gestión de Clientes</h3>
-          <p className="text-muted small mb-0">Visualiza y administra tu cartera de clientes</p>
+          <p className="text-white opacity-50 small mb-0">Visualiza y administra tu cartera de clientes</p>
         </div>
         <button 
           className="btn btn-primary d-flex align-items-center gap-2 fw-bold px-4 py-2 shadow-sm transition-all"
@@ -176,7 +176,7 @@ const ClientesView = () => {
       <div className="card border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '15px' }}>
         <div className="card-body p-3">
           <div className="input-group input-group-lg border-0">
-            <span className="input-group-text bg-transparent border-0 text-muted">
+            <span className="input-group-text bg-transparent border-0 text-white opacity-50">
               <Search size={22} />
             </span>
             <input 
@@ -216,17 +216,17 @@ const ClientesView = () => {
                 </div>
 
                 <div className="space-y-3 mt-4">
-                  <div className="d-flex align-items-center gap-2 text-muted small">
+                  <div className="d-flex align-items-center gap-2 text-white opacity-75 small">
                     <Phone size={14} className="text-primary" /> {cliente.telefono || 'Sin teléfono'}
                   </div>
-                  <div className="d-flex align-items-center gap-2 text-muted small">
+                  <div className="d-flex align-items-center gap-2 text-white opacity-75 small">
                     <MapPin size={14} className="text-primary" /> {cliente.ubicacion || cliente.direccion || 'Sin ubicación'}
                   </div>
                 </div>
 
                 <div className="mt-4 pt-3 border-top border-secondary border-opacity-10 d-flex gap-2">
                   <button 
-                    className="btn btn-dark flex-grow-1 d-flex align-items-center justify-content-center gap-2 small fw-bold"
+                    className="btn btn-outline-primary border-secondary border-opacity-25 flex-grow-1 d-flex align-items-center justify-content-center gap-2 small fw-bold text-white"
                     onClick={() => openEditModal(cliente)}
                   >
                     <BadgeCheck size={16} /> Editar
@@ -677,7 +677,8 @@ const ClientesView = () => {
       </Modal>
 
       <style>{`
-        .client-card:hover { transform: translateY(-5px); border: 1px solid var(--primary-color) !important; }
+        .client-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .client-card:hover { transform: translateY(-5px) scale(1.02); border: 1px solid var(--primary-color) !important; box-shadow: 0 10px 25px rgba(0,0,0,0.3) !important; }
         .social-container::-webkit-scrollbar { width: 4px; }
         .social-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
       `}</style>

@@ -256,7 +256,7 @@ const EquipoView = () => {
               <Trash2 size={40} />
             </div>
             <h5 className="fw-bold text-white mb-2">¿Estás seguro?</h5>
-            <p className="text-muted small mb-0 px-3">
+            <p className="text-white opacity-75 small mb-0 px-3">
               Estás a punto de eliminar a <strong>{selectedUser.nombre}</strong>. Esta acción no se puede deshacer y el usuario perderá el acceso inmediatamente.
             </p>
           </div>
