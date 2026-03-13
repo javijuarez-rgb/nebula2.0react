@@ -27,7 +27,7 @@ const ChatView = ({ user }) => {
   };
 
   return (
-    <div className="card bg-dark border-secondary shadow-lg" style={{ height: '75vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="card bg-dark border-secondary shadow-lg" style={{ height: 'calc(100vh - 160px)', display: 'flex', flexDirection: 'column' }}>
       {/* Cabecera del Chat */}
       <div className="card-header border-secondary d-flex justify-content-between align-items-center p-3">
         <div className="d-flex align-items-center gap-2">
@@ -38,7 +38,8 @@ const ChatView = ({ user }) => {
         </div>
         
         <select 
-          className="form-select form-select-sm w-auto bg-dark text-white border-secondary"
+          className="form-select form-select-sm w-auto border-0 shadow-sm"
+          style={{ backgroundColor: 'var(--bg-deep)', color: 'var(--text-main)' }}
           value={salaActual}
           onChange={(e) => setSalaActual(e.target.value)}
         >
@@ -54,9 +55,9 @@ const ChatView = ({ user }) => {
         style={{ flexGrow: 1, backgroundColor: '#181825' }}
       >
         {mensajes.length === 0 ? (
-          <div className="text-center text-muted my-auto">
-            <p>No hay mensajes en esta sala.</p>
-            <small>Los mensajes se guardan localmente (Mock Mode)</small>
+          <div className="text-center my-auto" style={{ color: 'var(--text-dim)' }}>
+            <p className="fs-5">No hay mensajes en esta sala.</p>
+            <small style={{ color: 'var(--text-muted)' }}>Los mensajes se guardan localmente (Mock Mode)</small>
           </div>
         ) : (
           mensajes.map((m) => (
@@ -78,7 +79,8 @@ const ChatView = ({ user }) => {
         <div className="input-group">
           <input 
             type="text" 
-            className="form-control bg-dark text-white border-secondary" 
+            className="form-control border-0 shadow-none" 
+            style={{ backgroundColor: 'var(--bg-lighter)', color: 'var(--text-main)' }}
             placeholder="Escribe un mensaje..."
             value={text}
             onChange={(e) => setText(e.target.value)}

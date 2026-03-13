@@ -49,7 +49,7 @@ const AprobacionesView = () => {
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h3 className="text-white">Aprobaciones Pendientes</h3>
-        <span className="badge bg-warning text-dark fs-6 rounded-pill px-3 py-2 d-flex align-items-center gap-2">
+        <span className="badge bg-warning text-dark fs-6 rounded-pill px-3 py-2 d-flex align-items-center gap-2 shadow-sm">
           <Clock size={18} /> {aprobaciones.length} en espera
         </span>
       </div>
@@ -65,25 +65,25 @@ const AprobacionesView = () => {
       ) : (
         <div className="row g-4">
           {aprobaciones.map(tarea => (
-            <div key={tarea.id} className="col-md-6">
-              <div className="card h-100 shadow-sm border-warning" style={{ backgroundColor: '#1e1e2e', borderColor: 'var(--warning-pastel) !important' }}>
-                <div className="card-header d-flex justify-content-between border-0 py-3" style={{ background: 'rgba(249, 226, 175, 0.1)', color: 'var(--warning-pastel)' }}>
-                  <strong className="fs-5">{tarea.cliente_nombre}</strong>
-                  <span className="badge bg-warning text-dark d-flex align-items-center gap-1">
-                     <AlertCircle size={14} /> Esperando
-                  </span>
-                </div>
+              <div key={tarea.id} className="col-md-6">
+                <div className="card h-100 shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+                  <div className="card-header d-flex justify-content-between border-0 py-3" style={{ background: 'rgba(250, 179, 135, 0.1)', color: 'var(--accent-color)' }}>
+                    <strong className="fs-5">{tarea.cliente_nombre}</strong>
+                    <span className="badge bg-warning text-dark d-flex align-items-center gap-1 shadow-sm">
+                       <AlertCircle size={14} /> Esperando
+                    </span>
+                  </div>
                 
                 <div className="card-body">
                   <h6 className="card-title text-white fs-5 mb-1">{tarea.titulo}</h6>
-                  <p className="small text-muted mb-3">Responsables: <strong className="text-light">{tarea.empleados}</strong></p>
+                  <p className="small mb-3" style={{ color: 'var(--text-dim)' }}>Responsables: <strong style={{ color: 'var(--text-main)' }}>{tarea.empleados}</strong></p>
                   
-                  <div className="p-3 rounded mb-4 shadow-sm" style={{ background: '#313244', borderLeft: '4px solid var(--primary-pastel)' }}>
-                    <small className="fw-bold d-block mb-2" style={{ color: 'var(--primary-pastel)' }}>Nota del empleado:</small>
-                    <div className="text-light small lh-lg">
-                      {renderMensaje(tarea.mensaje_empleado)}
+                    <div className="p-3 rounded mb-4 shadow-sm" style={{ background: 'var(--bg-lighter)', borderLeft: '4px solid var(--primary-color)' }}>
+                      <small className="fw-bold d-block mb-2" style={{ color: 'var(--primary-color)' }}>Nota del empleado:</small>
+                      <div className="small lh-lg" style={{ color: 'var(--text-main)' }}>
+                        {renderMensaje(tarea.mensaje_empleado)}
+                      </div>
                     </div>
-                  </div>
 
                   <div className="d-flex gap-2 mt-auto">
                     <button 
@@ -107,9 +107,10 @@ const AprobacionesView = () => {
                         <AlertCircle size={14} /> Motivo del rechazo:
                       </label>
                       <textarea 
-                        className="form-control form-control-sm mb-2 bg-dark text-white border-secondary"
+                        className="form-control form-control-sm mb-2 bg-dark text-white border-danger"
                         rows="3"
                         placeholder="Explica qué hay que corregir..."
+                        style={{ backgroundColor: 'var(--bg-deep) !important', color: 'var(--text-main)' }}
                         value={motivoRechazo}
                         onChange={(e) => setMotivoRechazo(e.target.value)}
                         autoFocus

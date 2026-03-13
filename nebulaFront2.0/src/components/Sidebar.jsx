@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import {
   LayoutDashboard,
   CheckSquare,
@@ -30,17 +30,21 @@ const Sidebar = () => {
 
   return (
     <div
-      className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark"
+      className="d-flex flex-column flex-shrink-0 p-3 text-white"
       style={{
         width: "280px",
-        minHeight: "100vh",
-        borderRight: "1px solid #313244",
+        height: "100vh",
+        backgroundColor: "var(--bg-dark)",
+        borderRight: "1px solid var(--border-color)",
+        overflowY: "auto",
+        position: "sticky",
+        top: 0
       }}
     >
-      <div className="d-flex align-items-center mb-4 me-md-auto text-white text-decoration-none">
-        <span className="fs-4 fw-bold text-primary">Nebula 2.0</span>
-      </div>
-      <hr style={{ backgroundColor: "#45475a" }} />
+      <Link to="/stats" className="d-flex align-items-center mb-4 me-md-auto text-white text-decoration-none">
+        <span className="fs-4 fw-bold" style={{ color: "var(--primary-color)" }}>Nebula 2.0</span>
+      </Link>
+      <hr style={{ borderColor: "var(--border-color)", opacity: 0.5 }} />
       <ul className="nav nav-pills flex-column mb-auto">
         {menuItems.map((item) => (
           <li key={item.id} className="nav-item mb-1">
@@ -52,7 +56,7 @@ const Sidebar = () => {
                 }`
               }
               style={({ isActive }) => ({
-                backgroundColor: isActive ? "#89b4fa" : "transparent",
+                backgroundColor: isActive ? "var(--primary-color)" : "transparent",
                 transition: "all 0.2s",
               })}
             >
@@ -62,7 +66,7 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
-      <hr />
+      <hr style={{ borderColor: "var(--border-color)", opacity: 0.5 }} />
       <div className="dropdown">
         <button
           className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2"

@@ -5,14 +5,15 @@ const TablaTareas = ({ tareas }) => {
     <div
       className="table-responsive"
       style={{
-        backgroundColor: "#1e1e2e",
+        backgroundColor: "var(--bg-card)",
         borderRadius: "8px",
         padding: "1rem",
+        border: "1px solid var(--border-color)"
       }}
     >
-      <table className="table table-dark table-hover mb-0">
+      <table className="table table-hover">
         <thead>
-          <tr style={{ color: "#89b4fa" }}>
+          <tr>
             <th>Cliente</th>
             <th>Tarea</th>
             <th>Estado</th>
@@ -25,7 +26,7 @@ const TablaTareas = ({ tareas }) => {
               <td>{tarea.cliente_nombre}</td>
               <td>
                 <div className="fw-bold">{tarea.titulo}</div>
-                <small className="text-muted">{tarea.descripcion}</small>
+                <small style={{ color: 'var(--text-dim)' }}>{tarea.descripcion}</small>
               </td>
               <td>
                 <span

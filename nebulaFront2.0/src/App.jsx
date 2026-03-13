@@ -11,6 +11,7 @@ import ClientesView from './pages/ClientesView';
 import AprobacionesView from './pages/AprobacionesView';
 import FinanzasView from './pages/FinanzasView';
 import MarcaView from './pages/MarcaView';
+import EquipoView from './pages/EquipoView';
 import StatCard from './components/StatCard';
 import TablaTareas from './components/TablaTareas';
 import { useTareas } from './hooks/useTareas';
@@ -63,6 +64,7 @@ function App() {
         <Route path="aprobaciones" element={<AprobacionesView />} />
         <Route path="finanzas" element={<FinanzasView />} />
         <Route path="marca" element={<MarcaView />} />
+        <Route path="equipo" element={<EquipoView />} />
         <Route path="*" element={<Navigate to="/stats" replace />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

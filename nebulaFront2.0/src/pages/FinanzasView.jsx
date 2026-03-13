@@ -57,45 +57,45 @@ const FinanzasView = () => {
       <div className="row g-4">
         {/* TABLA DE INGRESOS (CLIENTES) */}
         <div className="col-12">
-          <div className="card bg-dark border-secondary shadow-sm">
-            <div className="card-header border-secondary d-flex justify-content-between align-items-center bg-transparent py-3">
-              <h5 className="mb-0 text-white d-flex align-items-center gap-2">
+          <div className="card border-0 shadow-sm" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+            <div className="card-header border-0 d-flex justify-content-between align-items-center bg-transparent py-3">
+              <h5 className="mb-0 d-flex align-items-center gap-2" style={{ color: 'var(--text-main)' }}>
                 <DollarSign size={20} className="text-success" />
                 Ingresos por Cliente ({activeTab.toUpperCase()})
               </h5>
             </div>
             <div className="card-body p-0">
               <div className="table-responsive">
-                <table className="table table-dark table-hover mb-0 align-middle">
+                <table className="table table-hover align-middle">
                   <thead>
                     <tr>
-                      <th className="border-secondary">Cliente</th>
-                      <th className="border-secondary">Base (€)</th>
-                      <th className="border-secondary">Extra 1</th>
-                      <th className="border-secondary">Extra 2</th>
-                      <th className="border-secondary text-end">Total C/IVA</th>
+                      <th>Cliente</th>
+                      <th>Base (€)</th>
+                      <th>Extra 1</th>
+                      <th>Extra 2</th>
+                      <th className="text-end">Total C/IVA</th>
                     </tr>
                   </thead>
                   <tbody>
                     {MOCK_CLIENTES.map(cliente => (
                       <tr key={cliente.id}>
-                        <td className="border-secondary"><strong style={{ color: 'var(--primary-pastel)' }}>{cliente.nombre}</strong></td>
-                        <td className="border-secondary">
-                          <input type="number" className="form-control form-control-sm bg-dark text-white border-secondary w-75" defaultValue="0" />
+                        <td><strong style={{ color: 'var(--primary-color)' }}>{cliente.nombre}</strong></td>
+                        <td>
+                          <input type="number" className="form-control form-control-sm" defaultValue="0" />
                         </td>
-                        <td className="border-secondary">
-                           <select className="form-select form-select-sm bg-dark text-white border-secondary">
+                        <td>
+                           <select className="form-select form-select-sm">
                               <option value="">-- Catálogo --</option>
                               {MOCK_CATALOGO_INGRESOS.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
                            </select>
                         </td>
-                        <td className="border-secondary">
-                           <select className="form-select form-select-sm bg-dark text-white border-secondary">
+                        <td>
+                           <select className="form-select form-select-sm">
                               <option value="">-- Catálogo --</option>
                               {MOCK_CATALOGO_INGRESOS.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
                            </select>
                         </td>
-                        <td className="border-secondary text-end fw-bold">
+                        <td className="text-end fw-bold" style={{ color: 'var(--secondary-color)' }}>
                           0.00€
                         </td>
                       </tr>
@@ -109,51 +109,51 @@ const FinanzasView = () => {
 
         {/* TABLA DE COSTES / GASTOS LIBRES */}
         <div className="col-12">
-          <div className="card bg-dark border-secondary shadow-sm">
-            <div className="card-header border-secondary d-flex justify-content-between align-items-center bg-transparent py-3">
-              <h5 className="mb-0 text-white d-flex align-items-center gap-2">
+          <div className="card border-0 shadow-sm" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+            <div className="card-header border-0 d-flex justify-content-between align-items-center bg-transparent py-3">
+              <h5 className="mb-0 d-flex align-items-center gap-2" style={{ color: 'var(--text-main)' }}>
                 <Tag size={20} className="text-danger" />
                 Gastos Libres ({activeTab.toUpperCase()})
               </h5>
-              <button className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" onClick={handleAddGasto}>
+              <button className="btn btn-sm btn-outline-primary d-flex align-items-center gap-1 shadow-sm" onClick={handleAddGasto}>
                 <Plus size={16} /> Añadir Fila
               </button>
             </div>
             <div className="card-body p-0">
               <div className="table-responsive">
-                <table className="table table-dark table-hover mb-0 align-middle">
+                <table className="table table-hover align-middle">
                   <thead>
                     <tr>
-                      <th className="border-secondary">Concepto del Gasto</th>
-                      <th className="border-secondary" style={{width: '150px'}}>Precio (€)</th>
-                      <th className="border-secondary text-center" style={{width: '100px'}}>+ IVA</th>
-                      <th className="border-secondary text-end" style={{width: '120px'}}>Eliminar</th>
+                      <th>Concepto del Gasto</th>
+                      <th style={{width: '150px'}}>Precio (€)</th>
+                      <th className="text-center" style={{width: '100px'}}>+ IVA</th>
+                      <th className="text-end" style={{width: '120px'}}>Eliminar</th>
                     </tr>
                   </thead>
                   <tbody>
                     {gastos.map(g => (
                       <tr key={g.id}>
-                        <td className="border-secondary">
+                        <td>
                           <input 
                             type="text" 
-                            className="form-control form-control-sm bg-dark text-white border-secondary" 
+                            className="form-control form-control-sm" 
                             placeholder="Concepto..." 
                             value={g.concepto}
                             onChange={(e) => handleGastoChange(g.id, 'concepto', e.target.value)}
                           />
                         </td>
-                        <td className="border-secondary">
+                        <td>
                           <input 
                             type="number" 
-                            className="form-control form-control-sm bg-dark text-white border-secondary text-end" 
+                            className="form-control form-control-sm text-end" 
                             value={g.precio}
                             onChange={(e) => handleGastoChange(g.id, 'precio', parseFloat(e.target.value) || 0)}
                           />
                         </td>
-                        <td className="border-secondary text-center">
+                        <td className="text-center">
                           <input 
                             type="checkbox" 
-                            className="form-check-input border-secondary" 
+                            className="form-check-input" 
                             checked={g.tiene_iva}
                             onChange={(e) => handleGastoChange(g.id, 'tiene_iva', e.target.checked)}
                           />

@@ -4,13 +4,81 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  
+  /* Nebula Premium Dark Palette */
+  --bg-deep: #0b0b12;
+  --bg-dark: #11111b;
+  --bg-card: #181825;
+  --bg-lighter: #1e1e2e;
+  
+  --text-main: #ffffff;
+  --text-dim: #f8f9fc;
+  --text-muted: #e6e9ef;
+  
+  --primary-color: #89b4fa;
+  --secondary-color: #f5c2e7;
+  --accent-color: #fab387;
+  
+  --border-color: #313244;
+  --border-hover: #45475a;
+
+  color: var(--text-main);
+  background-color: var(--bg-deep);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Input / Placeholder fixes */
+input::placeholder, textarea::placeholder {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+input, textarea, select {
+  color: #ffffff !important;
+}
+
+.form-control-dark {
+  background-color: var(--bg-deep) !important;
+  border-color: var(--border-color) !important;
+  color: #ffffff !important;
+}
+
+.form-control-dark:focus {
+  background-color: var(--bg-deep) !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.25rem rgba(137, 180, 250, 0.1) !important;
+}
+
+/* Base scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Hide number input spinners */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 a {
@@ -24,10 +92,15 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  width: 100%;
+  user-select: none; /* App-like feel, blocks text selection globally */
+}
+
+/* Allow selection in inputs and editable areas */
+input, textarea, select, [contenteditable="true"] {
+  user-select: text;
 }
 
 h1 {
@@ -52,6 +125,36 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Global Table Styles */
+.table {
+  --bs-table-bg: transparent !important;
+  --bs-table-color: var(--text-main) !important;
+  --bs-table-border-color: var(--border-color) !important;
+  --bs-table-hover-bg: rgba(137, 180, 250, 0.05) !important;
+  --bs-table-hover-color: var(--text-main) !important;
+  margin-bottom: 0;
+  color: var(--text-main) !important;
+}
+
+.table th {
+  color: var(--text-dim) !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  border-bottom-width: 1px !important;
+}
+
+.table td {
+  border-color: var(--border-color) !important;
+}
+
+/* Ensure nested inputs in tables look good */
+.table input, .table select {
+  background-color: var(--bg-deep) !important;
+  border: 1px solid var(--border-color) !important;
 }
 
 @media (prefers-color-scheme: light) {

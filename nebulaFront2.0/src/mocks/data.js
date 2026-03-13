@@ -67,3 +67,9 @@ export const MOCK_TAREAS = [
     mensaje_empleado: "Revisad el PDF adjunto por favor. https://example.com/uploads/pruebas/menu_v2.pdf"
   }
 ];
+export const MOCK_EQUIPO = [
+  { id: 1, nombre: "Juan Pérez", usuario: "juan.p", rol: "Superadmin", pin_generado: "1234" },
+  { id: 2, nombre: "María García", usuario: "maria.g", rol: "Admin", pin_generado: "5678" },
+  { id: 3, nombre: "Carlos López", usuario: "carlos.l", rol: "Empleado", pin_generado: "9012" },
+  { id: 4, nombre: "Ana Martínez", usuario: "ana.m", rol: "Empleado", pin_generado: "3456" }
+];
