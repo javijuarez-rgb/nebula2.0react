@@ -13,8 +13,9 @@ import FinanzasView from './pages/FinanzasView';
 import EquipoView from './pages/EquipoView';
 import EstrategiaView from './pages/EstrategiaView';
 import CalendarioView from './pages/CalendarioView';
+import TareasView from './pages/TareasView';
+import PerfilView from './pages/PerfilView';
 import StatCard from './components/StatCard';
-import TablaTareas from './components/TablaTareas';
 import { useTareas } from './hooks/useTareas';
 
 // Create a small wrapper for Stats
@@ -35,16 +36,6 @@ function StatsView() {
   );
 }
 
-// Create a wrapper for Tareas
-function TareasView() {
-  const { tareas } = useTareas();
-  return (
-    <div className="card bg-transparent border-secondary p-3">
-      <TablaTareas tareas={tareas} />
-    </div>
-  );
-}
-
 function App() {
   const { user, login, isAuthenticated } = useAuth();
 
@@ -59,7 +50,7 @@ function App() {
       <Route path="/" element={<Dashboard user={user} />}>
         <Route index element={<Navigate to="/stats" replace />} />
         <Route path="stats" element={<StatsView />} />
-        <Route path="tareas" element={<TareasView />} />
+        <Route path="tareas" element={<TareasView user={user} />} />
         <Route path="calendario" element={<CalendarioView />} />
         <Route path="chat" element={<ChatView user={user} />} />
         <Route path="clientes" element={<ClientesView />} />
@@ -68,6 +59,7 @@ function App() {
         <Route path="aprobaciones" element={<AprobacionesView />} />
         <Route path="finanzas" element={<FinanzasView />} />
         <Route path="equipo" element={<EquipoView />} />
+        <Route path="perfil" element={<PerfilView user={user} />} />
         <Route path="*" element={<Navigate to="/stats" replace />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

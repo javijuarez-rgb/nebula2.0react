@@ -10,7 +10,8 @@ import {
   LogOut,
   LineChart,
   Target,
-  Calendar
+  Calendar,
+  User
 } from "lucide-react";
 
 const Sidebar = () => {

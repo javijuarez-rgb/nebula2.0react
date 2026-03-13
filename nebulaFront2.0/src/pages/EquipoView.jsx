@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MOCK_EQUIPO } from '../mocks/data';
-import { UserPlus, Pencil, Trash2, Shield, User, Key, X } from 'lucide-react';
+import { UserPlus, Pencil, Trash2, Shield, User, Key } from 'lucide-react';
+import Modal from '../components/Modal';
 
 const EquipoView = () => {
   const [equipo, setEquipo] = useState(MOCK_EQUIPO);
@@ -50,7 +51,7 @@ const EquipoView = () => {
       <div className="row g-4">
         {/* Sidebar: Nuevo Usuario */}
         <div className="col-lg-3">
-          <div className="card h-100 shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)' }}>
+          <div className="card h-100 shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '15px' }}>
             <div className="card-body p-4">
               <div className="d-flex align-items-center gap-2 mb-4">
                 <div className="p-2 rounded bg-primary-subtle text-primary">
@@ -95,7 +96,7 @@ const EquipoView = () => {
 
         {/* Main: Tabla de Equipo */}
         <div className="col-lg-9">
-          <div className="card shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)' }}>
+          <div className="card shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)', borderRadius: '15px' }}>
             <div className="card-body p-0">
               <div className="p-4 border-bottom border-secondary border-opacity-10 d-flex justify-content-between align-items-center">
                 <h5 className="mb-0 fw-bold text-white">Integrantes del Equipo</h5>
@@ -172,119 +173,97 @@ const EquipoView = () => {
       </div>
 
       {/* Edit Modal */}
-      {showEditModal && selectedUser && (
-        <div 
-          className="modal-overlay d-flex align-items-center justify-content-center animate__animated animate__fadeIn"
-          onClick={closeModal}
-        >
-          <div 
-            className="modal-content-custom card shadow-lg border-0" 
-            style={{ width: '450px', backgroundColor: 'var(--bg-card)' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="card-header border-secondary border-opacity-10 d-flex justify-content-between align-items-center p-3">
-              <h5 className="mb-0 fw-bold text-white">Editar Integrante</h5>
-              <button className="btn btn-link text-white p-0" onClick={closeModal}><X size={20}/></button>
+      <Modal
+        show={showEditModal && selectedUser}
+        onClose={closeModal}
+        title="Editar Integrante"
+        icon={<Pencil size={24} />}
+        footer={
+          <>
+            <button className="btn btn-secondary flex-grow-1 fw-bold py-2" onClick={closeModal}>Cancelar</button>
+            <button className="btn btn-primary flex-grow-1 fw-bold py-2" onClick={saveEdit}>Guardar Cambios</button>
+          </>
+        }
+      >
+        {selectedUser && (
+          <div className="animate__animated animate__fadeIn">
+            <div className="mb-3">
+              <label className="form-label small fw-bold text-white">Nombre Real (Máx 40, sin números)</label>
+              <input 
+                type="text" 
+                className="form-control form-control-dark" 
+                value={selectedUser.nombre}
+                onChange={(e) => {
+                  if (validateName(e.target.value)) setSelectedUser({...selectedUser, nombre: e.target.value})
+                }}
+              />
             </div>
-            <div className="card-body p-4">
-              <div className="mb-3">
-                <label className="form-label small fw-bold text-white">Nombre Real (Máx 40, sin números)</label>
-                <input 
-                  type="text" 
-                  className="form-control form-control-dark" 
-                  value={selectedUser.nombre}
-                  onChange={(e) => {
-                    if (validateName(e.target.value)) setSelectedUser({...selectedUser, nombre: e.target.value})
-                  }}
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label small fw-bold text-white">Usuario Login (3-20 caracteres)</label>
-                <input 
-                  type="text" 
-                  className="form-control form-control-dark" 
-                  value={selectedUser.usuario}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 20) setSelectedUser({...selectedUser, usuario: e.target.value})
-                  }}
-                />
-              </div>
-              <div className="mb-3">
-                <label className="form-label small fw-bold text-white">Rol de Usuario</label>
-                <select 
-                  className="form-select form-control-dark" 
-                  value={selectedUser.rol}
-                  onChange={(e) => setSelectedUser({...selectedUser, rol: e.target.value})}
-                >
-                  <option value="Empleado">Empleado</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Superadmin">Superadmin</option>
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="form-label small fw-bold text-white">Clave/PIN</label>
-                <input 
-                  type="text" 
-                  className="form-control form-control-dark" 
-                  placeholder="Letras y números"
-                  value={selectedUser.pin_generado}
-                  onChange={(e) => {
-                    if (validateAlphanumeric(e.target.value)) setSelectedUser({...selectedUser, pin_generado: e.target.value})
-                  }}
-                />
-              </div>
-              <div className="d-flex gap-2 mt-4">
-                <button className="btn btn-secondary flex-grow-1 fw-bold" onClick={closeModal}>Cancelar</button>
-                <button className="btn btn-primary flex-grow-1 fw-bold" onClick={saveEdit}>Guardar Cambios</button>
-              </div>
+            <div className="mb-3">
+              <label className="form-label small fw-bold text-white">Usuario Login (3-20 caracteres)</label>
+              <input 
+                type="text" 
+                className="form-control form-control-dark" 
+                value={selectedUser.usuario}
+                onChange={(e) => {
+                  if (e.target.value.length <= 20) setSelectedUser({...selectedUser, usuario: e.target.value})
+                }}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label small fw-bold text-white">Rol de Usuario</label>
+              <select 
+                className="form-select form-control-dark" 
+                value={selectedUser.rol}
+                onChange={(e) => setSelectedUser({...selectedUser, rol: e.target.value})}
+              >
+                <option value="Empleado">Empleado</option>
+                <option value="Admin">Admin</option>
+                <option value="Superadmin">Superadmin</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="form-label small fw-bold text-white">Clave/PIN</label>
+              <input 
+                type="text" 
+                className="form-control form-control-dark" 
+                placeholder="Letras y números"
+                value={selectedUser.pin_generado}
+                onChange={(e) => {
+                  if (validateAlphanumeric(e.target.value)) setSelectedUser({...selectedUser, pin_generado: e.target.value})
+                }}
+              />
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
 
       {/* Delete Modal */}
-      {showDeleteModal && selectedUser && (
-        <div 
-          className="modal-overlay d-flex align-items-center justify-content-center animate__animated animate__fadeIn"
-          onClick={closeModal}
-        >
-          <div 
-            className="modal-content-custom card shadow-lg border-0" 
-            style={{ width: '400px', backgroundColor: 'var(--bg-card)' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="card-body p-4 text-center">
-              <div className="p-3 bg-danger bg-opacity-10 text-danger rounded-circle d-inline-block mb-3">
-                <Trash2 size={32} />
-              </div>
-              <h5 className="fw-bold text-white mb-2">¿Eliminar Usuario?</h5>
-              <p className="text-muted small mb-4">
-                Estás a punto de eliminar a <strong>{selectedUser.nombre}</strong>. Esta acción no se puede deshacer.
-              </p>
-              <div className="d-flex gap-2">
-                <button className="btn btn-secondary flex-grow-1 fw-bold" onClick={closeModal}>Cancelar</button>
-                <button className="btn btn-danger flex-grow-1 fw-bold" onClick={confirmDelete}>Sí, Eliminar</button>
-              </div>
+      <Modal
+        show={showDeleteModal && selectedUser}
+        onClose={closeModal}
+        title="Eliminar Usuario"
+        icon={<Trash2 size={24} />}
+        footer={
+          <>
+            <button className="btn btn-secondary flex-grow-1 fw-bold py-2" onClick={closeModal}>Cancelar</button>
+            <button className="btn btn-danger flex-grow-1 fw-bold py-2" onClick={confirmDelete}>Sí, Eliminar</button>
+          </>
+        }
+      >
+        {selectedUser && (
+          <div className="text-center py-2 animate__animated animate__fadeIn">
+            <div className="p-3 bg-danger bg-opacity-10 text-danger rounded-circle d-inline-block mb-3">
+              <Trash2 size={40} />
             </div>
+            <h5 className="fw-bold text-white mb-2">¿Estás seguro?</h5>
+            <p className="text-muted small mb-0 px-3">
+              Estás a punto de eliminar a <strong>{selectedUser.nombre}</strong>. Esta acción no se puede deshacer y el usuario perderá el acceso inmediatamente.
+            </p>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
 
-      {/* Modal styles */}
       <style>{`
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0,0,0,0.7);
-          backdrop-filter: blur(4px);
-          z-index: 1050;
-        }
-        .animate__animated {
-          animation-duration: 0.3s;
-        }
         .cursor-pointer { cursor: pointer; }
         .hover-primary:hover { color: var(--primary-color) !important; transform: scale(1.1); transition: all 0.2s; }
         .hover-danger:hover { color: #ffffff !important; background-color: var(--bs-danger) !important; transform: scale(1.1); transition: all 0.2s; }

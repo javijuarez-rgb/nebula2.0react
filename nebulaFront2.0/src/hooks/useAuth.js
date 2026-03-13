@@ -7,7 +7,13 @@ export const useAuth = () => {
   const login = (username, password) => {
     // Simulamos la validación que tienes en el PHP
     if (username === 'admin' && password === 'admin123') {
-      const userData = { id: 1, name: 'Administrador', role: 'superadmin' };
+      const userData = { 
+        id: 1, 
+        name: 'Administrador', 
+        username: 'admin',
+        role: 'superadmin',
+        created_at: '2025-01-15'
+      };
       setUser(userData);
       return true;
     }
