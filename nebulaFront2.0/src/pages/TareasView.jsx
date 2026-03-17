@@ -6,14 +6,25 @@ import Modal from '../components/Modal';
 import Paginacion from '../components/Paginacion';
 
 const TareasView = ({ user }) => {
-  const [tareas, setTareas] = useState(MOCK_TAREAS);
+  const [tareas, setTareas] = useState(() => {
+    const savedTasks = localStorage.getItem('nebula_tasks');
+    return savedTasks ? JSON.parse(savedTasks) : MOCK_TAREAS;
+  });
+
+  // Sync with localStorage
+  React.useEffect(() => {
+    localStorage.setItem('nebula_tasks', JSON.stringify(tareas));
+  }, [tareas]);
+
   const [busqueda, setBusqueda] = useState('');
   const [filtroEstado, setFiltroEstado] = useState('all');
   const [filtroCliente, setFiltroCliente] = useState('all');
   const [filtroTrabajador, setFiltroTrabajador] = useState('all');
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -126,11 +137,51 @@ const TareasView = ({ user }) => {
     setEditingTask(null);
   };
 
+  const handleTaskStartRequest = (tarea) => {
+    setSelectedTask(tarea);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmStart = () => {
+    if (!selectedTask) return;
+    
+    // Determine next state
+    let nextEstado = selectedTask.estado;
+    if (selectedTask.estado === 'pendiente') nextEstado = 'proceso';
+    else if (selectedTask.estado === 'proceso') nextEstado = 'espera_aprobacion';
+
+    const updatedTasks = tareas.map(t => 
+      t.id === selectedTask.id 
+        ? { ...t, estado: nextEstado } 
+        : t
+    );
+
+    setTareas(updatedTasks);
+    setShowConfirmModal(false);
+    setSelectedTask(null);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString.replace(' ', 'T'));
+      if (isNaN(date.getTime())) return dateString;
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    } catch (e) {
+      return dateString;
+    }
+  };
+
   const closeModal = () => {
     setShowModal(false);
     setShowEditModal(false);
+    setShowConfirmModal(false);
     setNewTask(initialTaskState);
     setEditingTask(null);
+    setSelectedTask(null);
     setErrors({});
   };
 
@@ -230,6 +281,7 @@ const TareasView = ({ user }) => {
           tareas={paginatedTareas} 
           user={user} 
           onEditTask={handleEditClick}
+          onStartTask={handleTaskStartRequest}
         />
       </div>
 
@@ -468,6 +520,44 @@ const TareasView = ({ user }) => {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Confirmation Modal */}
+      <Modal
+        show={showConfirmModal}
+        onClose={closeModal}
+        title="Confirmar Cambio de Estado"
+        icon={<AlertCircle size={24} />}
+        footer={
+          <>
+            <button className="btn btn-secondary flex-grow-1 fw-bold py-2" onClick={closeModal}>Rechazar</button>
+            <button className="btn btn-primary flex-grow-1 fw-bold py-2" onClick={handleConfirmStart}>Aceptar</button>
+          </>
+        }
+      >
+        <div className="py-2">
+          <div className="text-center mb-4">
+            <p className="mb-1 fs-5 fw-bold text-primary">
+              {selectedTask?.estado === 'pendiente' ? '¿Quieres comenzar esta tarea?' : '¿Quieres pasar a espera de aprobación?'}
+            </p>
+            <p className="text-white opacity-75">{selectedTask?.titulo}</p>
+          </div>
+          
+          <div className="card bg-dark bg-opacity-50 border-secondary border-opacity-10 p-3 mb-3">
+            <div className="mb-3">
+              <label className="text-primary extreme-small fw-bold text-uppercase opacity-75 d-block mb-1">Descripción</label>
+              <p className="small mb-0 text-white opacity-90" style={{ whiteSpace: 'pre-wrap' }}>{selectedTask?.descripcion || 'Sin descripción'}</p>
+            </div>
+            
+            <div className="d-flex align-items-center gap-2">
+              <Calendar size={14} className="text-primary" />
+              <div flex-grow-1>
+                <label className="text-primary extreme-small fw-bold text-uppercase opacity-75 d-block" style={{ fontSize: '0.65rem' }}>Fecha Límite</label>
+                <span className="small fw-bold text-white">{formatDate(selectedTask?.fecha_limite)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </Modal>
 
       <style>{`

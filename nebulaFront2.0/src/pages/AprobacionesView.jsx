@@ -4,8 +4,21 @@ import { CheckCircle, XCircle, Clock, Link as LinkIcon, AlertCircle } from 'luci
 import Paginacion from '../components/Paginacion';
 
 const AprobacionesView = () => {
-  const [aprobaciones, setAprobaciones] = useState(
-    MOCK_TAREAS.filter(t => t.estado === 'espera_aprobacion')
+  // Load tasks from localStorage or MOCK_TAREAS as fallback
+  const [allTasks, setAllTasks] = useState(() => {
+    const savedTasks = localStorage.getItem('nebula_tasks');
+    return savedTasks ? JSON.parse(savedTasks) : MOCK_TAREAS;
+  });
+
+  // Sync back to localStorage whenever any task changes
+  React.useEffect(() => {
+    localStorage.setItem('nebula_tasks', JSON.stringify(allTasks));
+  }, [allTasks]);
+
+  // Derive approvals from allTasks
+  const aprobaciones = useMemo(() => 
+    allTasks.filter(t => t.estado === 'espera_aprobacion'),
+    [allTasks]
   );
   const [rechazoActivo, setRechazoActivo] = useState(null);
   const [motivoRechazo, setMotivoRechazo] = useState('');
@@ -26,7 +39,9 @@ const AprobacionesView = () => {
   };
 
   const handleAprobar = (id) => {
-    setAprobaciones(aprobaciones.filter(t => t.id !== id));
+    setAllTasks(prev => prev.map(t => 
+      t.id === id ? { ...t, estado: 'terminada' } : t
+    ));
     mostrarNotificacion('Tarea aprobada con éxito');
   };
 
@@ -35,7 +50,18 @@ const AprobacionesView = () => {
       mostrarNotificacion('Debes indicar un motivo de rechazo.', 'danger');
       return;
     }
-    setAprobaciones(aprobaciones.filter(t => t.id !== id));
+
+    setAllTasks(prev => prev.map(t => {
+      if (t.id === id) {
+        return { 
+          ...t, 
+          estado: 'proceso',
+          descripcion: t.descripcion + `\n\nMotivo del rechazo: ${motivoRechazo}`
+        };
+      }
+      return t;
+    }));
+
     setRechazoActivo(null);
     setMotivoRechazo('');
     mostrarNotificacion('Tarea rechazada y devuelta al empleado', 'warning');
@@ -44,14 +70,14 @@ const AprobacionesView = () => {
   // Función para simular el linkify de PHP
   const renderMensaje = (texto) => {
     if (!texto) return <span className="text-white opacity-25" style={{ fontStyle: 'italic', fontSize: '0.9em' }}>Sin nota adjunta.</span>;
-    
+
     // Regex súper básica para URLs
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return texto.split(urlRegex).map((part, i) => {
       if (part.match(urlRegex)) {
         return (
           <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-info fw-bold text-decoration-underline" style={{ wordBreak: 'break-all' }}>
-            {part} <LinkIcon size={12} className="ms-1"/>
+            {part} <LinkIcon size={12} className="ms-1" />
           </a>
         );
       }
@@ -80,8 +106,8 @@ const AprobacionesView = () => {
       </div>
 
       {notificacion && (
-        <div className={`toast-notification alert alert-${notificacion.tipo} ${notificacion.exiting ? 'exiting' : 'entering'} mx-auto shadow-lg border-0 d-flex align-items-center gap-3`} 
-             style={{ maxWidth: '400px' }}>
+        <div className={`toast-notification alert alert-${notificacion.tipo} ${notificacion.exiting ? 'exiting' : 'entering'} mx-auto shadow-lg border-0 d-flex align-items-center gap-3`}
+          style={{ maxWidth: '400px' }}>
           {notificacion.tipo === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
           <span className="fw-bold">{notificacion.msj}</span>
         </div>
@@ -99,24 +125,24 @@ const AprobacionesView = () => {
         </div>
       ) : (
         <>
-          <div 
+          <div
             key={currentPage}
             className="row g-4 animate__animated animate__fadeIn"
           >
             {paginatedAprobaciones.map(tarea => (
-                <div key={tarea.id} className="col-md-6 col-lg-4">
+              <div key={tarea.id} className="col-md-6 col-lg-4">
                 <div className="card h-100 shadow-sm border-0" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
                   <div className="card-header d-flex justify-content-between border-0 py-2" style={{ background: 'rgba(250, 179, 135, 0.1)', color: 'var(--accent-color)' }}>
                     <strong className="fs-5">{tarea.cliente_nombre}</strong>
                     <span className="badge bg-warning text-dark d-flex align-items-center gap-1 shadow-sm">
-                       <AlertCircle size={14} /> Esperando
+                      <AlertCircle size={14} /> Esperando
                     </span>
                   </div>
-                
-                <div className="card-body py-3">
-                  <h6 className="card-title text-white fs-6 mb-1">{tarea.titulo}</h6>
-                  <p className="extreme-small mb-2" style={{ color: 'var(--text-dim)' }}>Responsables: <strong style={{ color: 'var(--text-main)' }}>{tarea.empleados}</strong></p>
-                  
+
+                  <div className="card-body py-3">
+                    <h6 className="card-title text-white fs-6 mb-1">{tarea.titulo}</h6>
+                    <p className="extreme-small mb-2" style={{ color: 'var(--text-dim)' }}>Responsables: <strong style={{ color: 'var(--text-main)' }}>{tarea.empleados}</strong></p>
+
                     <div className="p-3 rounded mb-3 shadow-sm" style={{ background: 'var(--bg-lighter)', borderLeft: '4px solid var(--primary-color)' }}>
                       <small className="fw-bold d-block mb-2" style={{ color: 'var(--primary-color)' }}>Nota del empleado:</small>
                       <div className="small lh-lg" style={{ color: 'var(--text-main)' }}>
@@ -124,59 +150,59 @@ const AprobacionesView = () => {
                       </div>
                     </div>
 
-                  <div className="d-flex gap-2 mt-auto">
-                    <button 
-                      onClick={() => handleAprobar(tarea.id)}
-                      className="btn btn-success flex-grow-1 d-flex justify-content-center align-items-center gap-2"
-                    >
-                      <CheckCircle size={18} /> Aprobar
-                    </button>
-                    <button 
-                      onClick={() => setRechazoActivo(rechazoActivo === tarea.id ? null : tarea.id)}
-                      className="btn btn-danger flex-grow-1 d-flex justify-content-center align-items-center gap-2"
-                    >
-                      <XCircle size={18} /> Rechazar
-                    </button>
-                  </div>
-
-                  {/* Collapse para el campo de motivo de rechazo */}
-                  {rechazoActivo === tarea.id && (
-                    <div className="mt-3 p-3 rounded bg-dark border border-danger">
-                      <label className="small fw-bold text-danger mb-2 d-flex align-items-center gap-1">
-                        <AlertCircle size={14} /> Motivo del rechazo:
-                      </label>
-                      <textarea 
-                        className="form-control form-control-sm mb-2 bg-dark text-white border-danger"
-                        rows="3"
-                        placeholder="Explica qué hay que corregir..."
-                        style={{ backgroundColor: 'var(--bg-deep) !important', color: 'var(--text-main)' }}
-                        value={motivoRechazo}
-                        onChange={(e) => setMotivoRechazo(e.target.value)}
-                        autoFocus
-                      />
-                      <div className="d-flex justify-content-end gap-2 mt-2">
-                        <button 
-                          className="btn btn-sm btn-outline-secondary"
-                          onClick={() => setRechazoActivo(null)}
-                        >
-                          Cancelar
-                        </button>
-                        <button 
-                          onClick={() => handleRechazar(tarea.id)}
-                          className="btn btn-sm btn-danger fw-bold"
-                        >
-                          Confirmar Rechazo
-                        </button>
-                      </div>
+                    <div className="d-flex gap-2 mt-auto">
+                      <button
+                        onClick={() => handleAprobar(tarea.id)}
+                        className="btn btn-success flex-grow-1 d-flex justify-content-center align-items-center gap-2"
+                      >
+                        <CheckCircle size={18} /> Aprobar
+                      </button>
+                      <button
+                        onClick={() => setRechazoActivo(rechazoActivo === tarea.id ? null : tarea.id)}
+                        className="btn btn-danger flex-grow-1 d-flex justify-content-center align-items-center gap-2"
+                      >
+                        <XCircle size={18} /> Rechazar
+                      </button>
                     </div>
-                  )}
+
+                    {/* Collapse para el campo de motivo de rechazo */}
+                    {rechazoActivo === tarea.id && (
+                      <div className="mt-3 p-3 rounded bg-dark border border-danger">
+                        <label className="small fw-bold text-danger mb-2 d-flex align-items-center gap-1">
+                          <AlertCircle size={14} /> Motivo del rechazo:
+                        </label>
+                        <textarea
+                          className="form-control form-control-sm mb-2 bg-dark text-white border-danger"
+                          rows="3"
+                          placeholder="Explica qué hay que corregir..."
+                          style={{ backgroundColor: 'var(--bg-deep) !important', color: 'var(--text-main)' }}
+                          value={motivoRechazo}
+                          onChange={(e) => setMotivoRechazo(e.target.value)}
+                          autoFocus
+                        />
+                        <div className="d-flex justify-content-end gap-2 mt-2">
+                          <button
+                            className="btn btn-sm btn-outline-secondary"
+                            onClick={() => setRechazoActivo(null)}
+                          >
+                            Cancelar
+                          </button>
+                          <button
+                            onClick={() => handleRechazar(tarea.id)}
+                            className="btn btn-sm btn-danger fw-bold"
+                          >
+                            Confirmar Rechazo
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
             ))}
           </div>
-          
-          <Paginacion 
+
+          <Paginacion
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={handlePageChange}

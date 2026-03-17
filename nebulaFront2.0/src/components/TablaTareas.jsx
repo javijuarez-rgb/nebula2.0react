@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { User, Clock, AlertCircle, CheckCircle2, Pencil } from "lucide-react";
 
-const TablaTareas = ({ tareas, user, onEditTask }) => {
+const TablaTareas = ({ tareas, user, onEditTask, onStartTask }) => {
   const [expandedTaskId, setExpandedTaskId] = useState(null);
   const canEdit = user && (user.role === 'admin' || user.role === 'superadmin');
 
@@ -16,6 +16,13 @@ const TablaTareas = ({ tareas, user, onEditTask }) => {
       default:
         return <span className="badge bg-secondary-subtle text-secondary d-flex align-items-center gap-1 w-fit">PENDIENTE</span>;
     }
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const parts = dateString.split(' ')[0].split('-');
+    if (parts.length < 3) return dateString;
+    return `${parts[2]}/${parts[1]}`;
   };
 
   return (
@@ -38,7 +45,13 @@ const TablaTareas = ({ tareas, user, onEditTask }) => {
               <tr 
                 key={tarea.id} 
                 className={`border-secondary border-opacity-10 transition-all cursor-pointer ${isExpanded ? 'bg-white bg-opacity-5' : ''}`}
-                onClick={() => setExpandedTaskId(tarea.id)}
+                onClick={() => {
+                  if (tarea.estado === 'pendiente' || tarea.estado === 'proceso') {
+                    onStartTask(tarea);
+                  } else {
+                    setExpandedTaskId(isExpanded ? null : tarea.id);
+                  }
+                }}
                 onMouseLeave={() => setExpandedTaskId(null)}
                 style={{ verticalAlign: 'top' }}
               >
@@ -71,7 +84,7 @@ const TablaTareas = ({ tareas, user, onEditTask }) => {
                 <td className="py-3">
                   <div className="mt-1">
                     <code className="small text-primary bg-primary bg-opacity-10 px-2 py-1 rounded">
-                      {tarea.fecha_limite.split(' ')[0]}
+                      {formatDate(tarea.fecha_limite)}
                     </code>
                   </div>
                 </td>
@@ -102,6 +115,7 @@ const TablaTareas = ({ tareas, user, onEditTask }) => {
           overflow: hidden;
           transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
+          white-space: pre-wrap;
         }
         .description-wrapper:not(.expanded) small {
           display: -webkit-box;
